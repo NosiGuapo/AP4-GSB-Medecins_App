@@ -10,16 +10,32 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Background(
       // Setting up welcoming message
       child: Column(
         // Centering text
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 60),
+            child: Positioned(
+              top: 0,
+              child: Image(
+                // image: NetworkImage("https://source.unsplash.com/random"),
+                // GSB Logo
+                image: const AssetImage('assets/images/gsb-logo.png'),
+                height: size.height * 0.22,
+              )
+            ),
+          ),
           const Text(
             // Text styles
             "Bienvenue sur GSB Médecins !",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
+            ),
           ),
           RoundPcButton(
             // Actions and text may vary, we need to specify its content and action
@@ -27,10 +43,10 @@ class Body extends StatelessWidget {
             colour: primaryColour,
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
-                  ),
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
               );
             },
           ),
@@ -52,4 +68,3 @@ class Body extends StatelessWidget {
     );
   }
 }
-

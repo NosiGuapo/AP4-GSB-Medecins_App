@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         primaryColor: primaryColour,
         scaffoldBackgroundColor: bgColour,
       ),
-      home: WelcomeScreen(),
+      home: const WelcomeScreen(),
     );
   }
 }

@@ -23,6 +23,7 @@ class RoundPcButton extends StatelessWidget {
     return Container(
       // Manage button size
       width: size.width * 0.6,
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: ClipRRect(
         // Border-radius 20px
         borderRadius: BorderRadius.circular(20),

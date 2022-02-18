@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class Background extends StatelessWidget {
   final Widget child;
 
@@ -13,7 +12,7 @@ class Background extends StatelessWidget {
   Widget build(BuildContext context) {
     // Set up full w/h of our screen
     Size size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
       height: size.height,
       width: double.infinity,
       child: Stack(
