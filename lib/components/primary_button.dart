@@ -37,7 +37,7 @@ class RoundPcButton extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             text,
-            style: TextStyle(fontWeight: FontWeight.w200, color: textColour),
+            style: TextStyle(fontWeight: FontWeight.w700, color: textColour, fontFamily: 'Roboto'),
           ),
         ),
       ),
