@@ -1,22 +1,14 @@
+import 'package:ap4_gsbmedecins_appli/screens/SignIn/components/body.dart';
 import 'package:flutter/material.dart';
 
+// stless to trigger the class
 class SignInScreen extends StatelessWidget {
   const SignInScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign In'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigate back to first route when tapped.
-          },
-          child: const Text('Go back!'),
-        ),
-      ),
+    return const Scaffold(
+      body: Body(),
     );
   }
 }

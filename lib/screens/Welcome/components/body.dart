@@ -14,7 +14,7 @@ class Body extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Background(
       // Setting up welcoming message
-      child: Column(
+      bg: Column(
         // Centering text
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
