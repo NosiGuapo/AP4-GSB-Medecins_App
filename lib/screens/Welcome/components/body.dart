@@ -1,5 +1,6 @@
 import 'package:ap4_gsbmedecins_appli/constants.dart';
-import 'package:ap4_gsbmedecins_appli/screens/Login/login_screen.dart';
+import 'package:ap4_gsbmedecins_appli/screens/SignIn/signin_screen.dart';
+import 'package:ap4_gsbmedecins_appli/screens/SignUp/signup_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Welcome/components/background.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,7 @@ class Body extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const LoginScreen(),
+                  builder: (context) => const SignInScreen(),
                 ),
               );
             },
@@ -55,7 +56,7 @@ class Body extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const LoginScreen(),
+                  builder: (context) => const SignUpScreen(),
                 ),
               );
             },
