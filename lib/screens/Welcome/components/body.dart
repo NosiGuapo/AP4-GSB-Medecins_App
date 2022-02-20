@@ -18,16 +18,13 @@ class Body extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 60),
-            child: Positioned(
-              top: 0,
+              margin: const EdgeInsets.symmetric(vertical: 60),
               child: Image(
                 // image: NetworkImage("https://source.unsplash.com/random"),
                 // GSB Logo
                 image: const AssetImage('assets/images/gsb-logo.png'),
                 height: size.height * 0.22,
-              )
-            ),
+              ),
           ),
           const Text(
             // Text styles

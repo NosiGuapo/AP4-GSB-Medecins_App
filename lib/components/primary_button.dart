@@ -32,8 +32,8 @@ class RoundPcButton extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
             // Button background colour
             backgroundColor: colour,
-            // Button background teint on hover
-            primary: Colors.purple
+            // Button background tent on hover
+            primary: Colors.greenAccent
           ),
           onPressed: onPressed,
           child: Text(
