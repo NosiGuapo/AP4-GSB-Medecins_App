@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'GSB Médecins',
       theme: ThemeData(
         primaryColor: primaryColour,
-        scaffoldBackgroundColor: bgColour,
+        scaffoldBackgroundColor: lightBgColour,
       ),
       home: const WelcomeScreen(),
     );

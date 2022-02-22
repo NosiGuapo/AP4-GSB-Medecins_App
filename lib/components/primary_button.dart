@@ -14,7 +14,7 @@ class RoundPcButton extends StatelessWidget {
     required this.onPressed,
     // Button colours will never change, we can define them in the constructor
     this.colour = primaryColour,
-    this.textColour = bgColour,
+    this.textColour = lightBgColour,
   }) : super(key: key);
 
   @override
