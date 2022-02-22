@@ -11,7 +11,9 @@ class Body extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Background(
       bg: Column(
-        children: <Widget>[],
+        children: const <Widget>[
+
+        ],
       ),
     );
   }
