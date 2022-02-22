@@ -1,14 +1,14 @@
 import 'package:ap4_gsbmedecins_appli/constants.dart';
 import 'package:flutter/material.dart';
 
-CustomTheme currentTheme = CustomTheme();
+CustomTheme actualTheme = CustomTheme();
 
 // ChangeNotifier acts like a listener which will help our method to update itself
 class CustomTheme with ChangeNotifier {
   static bool _isDarkTheme = false;
 
   // Depending on the boolean value, the correct theme will be applied
-  ThemeMode get currentTheme => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
+  ThemeMode get actualTheme => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
 
   // Method toggling the theme
   void toggleTheme() {
@@ -18,7 +18,7 @@ class CustomTheme with ChangeNotifier {
     notifyListeners();
   }
 
-  static ThemeData get lightTheme {
+  static ThemeData get lTheme {
     return ThemeData(
         backgroundColor: lightBgColour,
         scaffoldBackgroundColor: lightBgColour,
@@ -32,7 +32,7 @@ class CustomTheme with ChangeNotifier {
     );
   }
 
-  static ThemeData get darkTheme {
+  static ThemeData get dTheme {
     return ThemeData(
       backgroundColor: darkBgColour,
       scaffoldBackgroundColor: darkBgColour,
