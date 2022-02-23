@@ -57,16 +57,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       ),
       // Bottom navigation bar
       bottomNavigationBar: BottomNavigationBar(
-        // Defining index currently used
         currentIndex: _currentIndex,
-        // Define which index is currently in use (defined by ordering number from 0 to x)
-        onTap: (index) {
-          // Passing the correct index
-          setState(() {
-            index = _currentIndex;
-          });
-          _pageController.jumpToPage(_currentIndex);
-        },
+        onTap: (index) => _pageController.jumpToPage(index),
         items: const <BottomNavigationBarItem>[
           // A Navbar required more than a single item in order to work
           BottomNavigationBarItem(
