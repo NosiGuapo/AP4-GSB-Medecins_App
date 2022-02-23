@@ -67,7 +67,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           });
           _pageController.jumpToPage(_currentIndex);
         },
-        items: const [
+        items: const <BottomNavigationBarItem>[
           // A Navbar required more than a single item in order to work
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
