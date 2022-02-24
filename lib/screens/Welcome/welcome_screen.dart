@@ -1,3 +1,4 @@
+import 'package:ap4_gsbmedecins_appli/screens/Profile/ShowProfile/profile_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Settings/settings_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/SignIn/signin_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Welcome/components/body.dart';
@@ -29,18 +30,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Header
-      appBar: AppBar(
-        title: const Text("Feur"),
-        backgroundColor: primaryColour,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.brightness_4_rounded),
-            onPressed: () {
-              actualTheme.toggleTheme();
-            },
-          )
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: const Text("Feur"),
+      //   backgroundColor: primaryColour,
+      //   actions: [
+      //     IconButton(
+      //       icon: const Icon(Icons.brightness_4_rounded),
+      //       onPressed: () {
+      //         actualTheme.toggleTheme();
+      //       },
+      //     )
+      //   ],
+      // ),
       // Body (managed and filled with other parts of the flutter app)
       body: PageView(
         controller: _pageController,
@@ -53,8 +54,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           // Setting up multiple body makes the user able to swipe from a body to another, however the global structure will be kept (Header etc)
           // The current setup is momentary and will be improved when the complete auth system is up
           Body(),
-          SignInScreen(),
-          SettingsScreen()
+          ProfileScreen(),
+          SettingsScreen(),
+          SignInScreen()
         ],
       ),
       // Bottom navigation bar
@@ -64,20 +66,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         items: const <BottomNavigationBarItem>[
           // A Navbar required more than a single item in order to work
           BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Accueil",
+            icon: Icon(Icons.home),
+            label: "Accueil",
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_sharp),
-              label: "Sign In",
+            icon: Icon(Icons.account_circle_sharp),
+            label: "Profile",
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: "Paramètres",
+            icon: Icon(Icons.settings),
+            label: "Paramètres",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_balance_rounded),
+            label: "Sign in",
           ),
         ],
-        // Icons colour on active
+        // Icons colour while active
         fixedColor: primaryColour,
+        // Icons colour while inactive
+        unselectedItemColor: Colors.black38,
         backgroundColor: Colors.white,
       ),
     );
