@@ -1,3 +1,4 @@
+import 'package:ap4_gsbmedecins_appli/screens/Settings/settings_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/SignIn/signin_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Welcome/components/body.dart';
 import 'package:ap4_gsbmedecins_appli/themes.dart';
@@ -52,7 +53,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           // Setting up multiple body makes the user able to swipe from a body to another, however the global structure will be kept (Header etc)
           // The current setup is momentary and will be improved when the complete auth system is up
           Body(),
-          SignInScreen()
+          SignInScreen(),
+          SettingsScreen()
         ],
       ),
       // Bottom navigation bar
@@ -64,14 +66,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: "Accueil",
-              backgroundColor: primaryColour
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Example",
-              backgroundColor: primaryColour
+              icon: Icon(Icons.account_circle_sharp),
+              label: "Sign In",
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: "Paramètres",
           ),
         ],
+        // Icons colour on active
+        fixedColor: primaryColour,
+        backgroundColor: Colors.white,
       ),
     );
   }
