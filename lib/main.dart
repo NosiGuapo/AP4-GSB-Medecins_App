@@ -1,9 +1,11 @@
 import 'package:ap4_gsbmedecins_appli/screens/Welcome/welcome_screen.dart';
 import 'package:ap4_gsbmedecins_appli/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+
 
 void main() {
-  runApp(const MyApp());
+  Settings.init().then((value) => runApp(const MyApp()));
 }
 
 class MyApp extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:ap4_gsbmedecins_appli/components/AuthSubtext.dart';
+import 'package:ap4_gsbmedecins_appli/components/auth_subtext.dart';
 import 'package:ap4_gsbmedecins_appli/components/input_password_field.dart';
 import 'package:ap4_gsbmedecins_appli/components/primary_button.dart';
 import 'package:ap4_gsbmedecins_appli/screens/SignIn/components/background.dart';
