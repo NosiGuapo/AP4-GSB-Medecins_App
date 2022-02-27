@@ -4,10 +4,11 @@ import '../../../../components/icon_options.dart';
 import 'background.dart';
 import 'package:ap4_gsbmedecins_appli/themes.dart';
 
-
 class Body extends StatefulWidget {
+  // Cached values in order to remember the user's preferences
   static const keyDarkMode = 'key-dark-mode';
   static const keyLanguage = 'key-app-language';
+  static const keyUsername = 'key-username';
 
   const Body({Key? key}) : super(key: key);
 
@@ -24,11 +25,12 @@ class _BodyState extends State<Body> {
           padding: const EdgeInsets.all(24),
           children: [
             SettingsGroup(
-              title: 'Général',
-              children: <Widget>[
-                darkModeOption(),
-                languageOption()
-              ],
+              title: 'Préférences',
+              children: <Widget>[darkModeOption(), languageOption()],
+            ),
+            SettingsGroup(
+              title: 'Compte',
+              children: <Widget>[usernameOption()],
             )
           ],
         ),
@@ -50,10 +52,16 @@ class _BodyState extends State<Body> {
       settingKey: Body.keyDarkMode,
       title: 'Mode Sombre',
       leading: const OptionIcons(
-        icon: Icons.brightness_4_rounded,
-        bgColour: Colors.blueAccent,
+        // icon: Icons.brightness_4_rounded,
+        icon: Icons.dark_mode,
+        bgColour: Color(0xFF642ef3),
       ),
       onChange: (isDark) {
         actualTheme.toggleTheme();
       });
+
+  Widget usernameOption() => TextInputSettingsTile(
+    settingKey: Body.keyUsername,
+    title: "Nom d'utilisateur",
+  );
 }

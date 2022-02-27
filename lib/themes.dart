@@ -1,5 +1,6 @@
 import 'package:ap4_gsbmedecins_appli/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 CustomTheme actualTheme = CustomTheme();
 
