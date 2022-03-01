@@ -2,7 +2,7 @@ import 'package:ap4_gsbmedecins_appli/screens/Profile/ShowProfile/profile_screen
 import 'package:ap4_gsbmedecins_appli/screens/Settings/settings_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/SignIn/signin_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Welcome/components/body.dart';
-import 'package:ap4_gsbmedecins_appli/themes.dart';
+import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorList/doctors_screen.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 
@@ -29,20 +29,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Header
-      // appBar: AppBar(
-      //   title: const Text("Feur"),
-      //   backgroundColor: primaryColour,
-      //   actions: [
-      //     IconButton(
-      //       icon: const Icon(Icons.brightness_4_rounded),
-      //       onPressed: () {
-      //         actualTheme.toggleTheme();
-      //       },
-      //     )
-      //   ],
-      // ),
-      // Body (managed and filled with other parts of the flutter app)
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -54,6 +40,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           // Setting up multiple body makes the user able to swipe from a body to another, however the global structure will be kept (Header etc)
           // The current setup is momentary and will be improved when the complete auth system is up
           Body(),
+          DoctorsScreen(),
           ProfileScreen(),
           SettingsScreen(),
           SignInScreen()
@@ -68,6 +55,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: "Accueil",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.content_paste),
+            label: "Médecins",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_sharp),
