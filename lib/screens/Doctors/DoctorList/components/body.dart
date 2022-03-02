@@ -1,7 +1,9 @@
-import 'package:ap4_gsbmedecins_appli/entities/User.dart';
+import 'package:ap4_gsbmedecins_appli/entities/Doctor.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorList/components/background.dart';
-import 'package:ap4_gsbmedecins_appli/services/UserService.dart';
+import 'package:ap4_gsbmedecins_appli/services/DoctorService.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../constants.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -21,37 +23,40 @@ class _BodyState extends State<Body> {
     return Background(
       bg: Scaffold(
         appBar: AppBar(
-          title: const Text('Liste des utilisateurs'),
+          title: const Text('Liste des Médecins'),
+          backgroundColor: primaryColour,
         ),
-        body: FutureBuilder<List<User>>(
-          future: UserService.getAllUsers(),
-          builder: (context, snapshot) {
-
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return const Center(child: CircularProgressIndicator());
-              default:
-                if (!snapshot.hasData) {
+        body: Padding(
+          padding: const EdgeInsets.only(top: 25),
+          child: FutureBuilder<List<Doctor>>(
+            future: DoctorService.getAllDoctors(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
                   return const Center(child: CircularProgressIndicator());
-                } else {
-                  final users = snapshot.data;
-                  return buildUser(users!);
-                }
-            }
-          },
-        ),
+                default:
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    final doctors = snapshot.data;
+                    return buildDoctors(doctors!);
+                  }
+              }
+            },
+          ),
+        )
       ),
     );
   }
 
-  Widget buildUser(List<User> users) => ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: users.length,
+  Widget buildDoctors(List<Doctor> doctors) => ListView.builder(
+      // physics: const BouncingScrollPhysics(),
+      itemCount: doctors.length,
       itemBuilder: (context, index) {
-        final user = users[index];
+        final doctor = doctors[index];
         return ListTile(
-          title: Text(user.fname + " " + user.lname),
-          subtitle: Text(user.mail),
+          title: Text(doctor.prenom + " " + doctor.nom),
+          subtitle: Text(doctor.adresse),
         );
       });
 }
