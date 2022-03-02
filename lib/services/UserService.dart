@@ -9,12 +9,13 @@ class UserService{
     final response = await http.get(url);
 
     if (response.statusCode == 200){
-      final body = json.decode(response.body);
-      // Show retrieved data
-      // print(body);
-      return body.map<User>(User.fromJson).toList();
+      var body = json.decode(response.body) as List;
+      var users = body.map((body) {
+        return User.fromJson(body);
+      }).toList();
+      return users;
     } else {
-      print('Une erreur est survenue lors de l\'accès aux données.');
+      print('Une erreur est survenue lors de l\'accès aux données (getAllUsers).');
       return List<User>.empty();
     }
   }
