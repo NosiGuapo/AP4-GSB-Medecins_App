@@ -19,8 +19,8 @@ class User {
     required this.username,
     required this.mail,
     required this.passwd,
+    // Invitation and registerdate are optional
     this.register,
-    // Invitation is optional
     this.invitation,
   });
 

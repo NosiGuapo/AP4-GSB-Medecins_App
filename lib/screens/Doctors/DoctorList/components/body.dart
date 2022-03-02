@@ -26,16 +26,15 @@ class _BodyState extends State<Body> {
         body: FutureBuilder<List<User>>(
           future: UserService.getAllUsers(),
           builder: (context, snapshot) {
-            final users = snapshot.data;
+
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return const Center(child: CircularProgressIndicator());
               default:
-                if (snapshot.hasError) {
-                  return const Center(
-                      child: Text(
-                          'Une erreur est survenue lors de l\'accès aux données'));
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
                 } else {
+                  final users = snapshot.data;
                   return buildUser(users!);
                 }
             }
@@ -50,7 +49,6 @@ class _BodyState extends State<Body> {
       itemCount: users.length,
       itemBuilder: (context, index) {
         final user = users[index];
-        print(user);
         return ListTile(
           title: Text(user.fname + " " + user.lname),
           subtitle: Text(user.mail),
