@@ -9,7 +9,7 @@ class UserService{
     final response = await http.get(url);
 
     if (response.statusCode == 200){
-      var body = json.decode(response.body) as List;
+      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       var users = body.map((body) {
         return User.fromJson(body);
       }).toList();
