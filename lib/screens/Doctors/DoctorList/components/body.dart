@@ -3,6 +3,7 @@ import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorList/components/back
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorPage/doctor_screen.dart';
 import 'package:ap4_gsbmedecins_appli/services/DoctorService.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../../../constants.dart';
 
@@ -36,9 +37,9 @@ class _BodyState extends State<Body> {
                   case ConnectionState.waiting:
                     return const Center(
                         child: CircularProgressIndicator(
-                          color: primaryColour,
-                          strokeWidth: 2,
-                        ));
+                      color: primaryColour,
+                      strokeWidth: 2,
+                    ));
                   default:
                     if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
@@ -58,16 +59,35 @@ class _BodyState extends State<Body> {
       itemCount: doctors.length,
       itemBuilder: (context, index) {
         final doctor = doctors[index];
-        return ListTile(
+        return Slidable(
+          // Actions on the right part of each slide
+          endActionPane: const ActionPane(
+            motion: ScrollMotion(),
+            children: [
+              SlidableAction(
+                onPressed: null,
+                backgroundColor: remove,
+                icon: Icons.delete,
+                label: "Supprimer",
+                // flex: 1,
+              ),
+              SlidableAction(
+                onPressed: null,
+                backgroundColor: Colors.blueAccent,
+                icon: Icons.edit,
+                label: "Modifier",
+              ),
+            ],
+          ),
+          child: ListTile(
             title: Text(doctor.prenom + " " + doctor.nom),
             subtitle: Text(doctor.adresse),
             onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        DoctorScreen(doctor: doctor),
-                  ),
-                ),
+              MaterialPageRoute(
+                builder: (BuildContext context) => DoctorScreen(doctor: doctor),
+              ),
+            ),
+          ),
         );
-      }
-  );
+      });
 }
