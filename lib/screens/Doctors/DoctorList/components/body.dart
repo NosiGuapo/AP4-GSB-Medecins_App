@@ -34,7 +34,11 @@ class _BodyState extends State<Body> {
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColour,
+                          strokeWidth: 2,
+                        ));
                   default:
                     if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
