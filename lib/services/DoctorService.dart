@@ -14,8 +14,20 @@ class DoctorService{
       }).toList();
       return doctors;
     } else {
-      print('Une erreur est survenue lors de l\'accès aux données (getAllUsers).');
+      print('Une erreur est survenue lors de l\'accès aux données (getAllDoctors): Erreur '+response.statusCode.toString());
       return List<Doctor>.empty();
+    }
+  }
+
+  static Future<bool> deleteDoctor(int id) async {
+    final url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/delete/'+id.toString());
+    final response = await http.post(url);
+
+    if (response.statusCode == 200){
+      return true;
+    } else {
+      print('Une erreur est survenue lors de la suppression du docteur: Erreur '+response.statusCode.toString());;
+      return false;
     }
   }
 }
