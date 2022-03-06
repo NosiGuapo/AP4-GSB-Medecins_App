@@ -61,21 +61,25 @@ class _BodyState extends State<Body> {
         final doctor = doctors[index];
         return Slidable(
           // Actions on the right part of each slide
-          endActionPane: const ActionPane(
-            motion: ScrollMotion(),
+          endActionPane: ActionPane(
+            motion: const ScrollMotion(),
             children: [
               SlidableAction(
-                onPressed: null,
                 backgroundColor: remove,
                 icon: Icons.delete,
                 label: "Supprimer",
+                onPressed: (BuildContext context) {
+                  onDismissed(doctor.id, "d");
+                },
                 // flex: 1,
               ),
               SlidableAction(
-                onPressed: null,
                 backgroundColor: Colors.blueAccent,
                 icon: Icons.edit,
                 label: "Modifier",
+                onPressed: (BuildContext context) {
+                  onDismissed(doctor.id, "e");
+                },
               ),
             ],
           ),
@@ -90,4 +94,18 @@ class _BodyState extends State<Body> {
           ),
         );
       });
+
+  void onDismissed(int id, String action){
+    switch (action){
+      case "d":
+        DoctorService.deleteDoctor(id);
+        break;
+      case "e":
+        print("edit");
+        break;
+      default:
+        print("aaa");
+        break;
+    }
+  }
 }
