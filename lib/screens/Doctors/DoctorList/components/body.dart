@@ -65,7 +65,7 @@ class _BodyState extends State<Body> {
             motion: const ScrollMotion(),
             children: [
               SlidableAction(
-                backgroundColor: remove,
+                backgroundColor: failToastColour,
                 icon: Icons.delete,
                 label: "Supprimer",
                 onPressed: (BuildContext context) {
@@ -95,10 +95,41 @@ class _BodyState extends State<Body> {
         );
       });
 
-  void onDismissed(int id, String action){
-    switch (action){
+  void onDismissed(int id, String action) {
+    switch (action) {
       case "d":
-        DoctorService.deleteDoctor(id);
+        final del = DoctorService.deleteDoctor(id);
+        del.then((value) {
+          // print(value);
+          final String snackMessage;
+          final Color bgColour;
+          if (value) {
+            snackMessage = "Le médecin a été supprimé avec succès.";
+            bgColour = succeedToastColour;
+          } else {
+            snackMessage =
+                "Une erreur est survenue lors de la suppression du médecin.";
+            bgColour = failToastColour;
+          }
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              snackMessage,
+              style: const TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 17,
+                fontWeight: FontWeight.w400
+              ),
+            ),
+            duration: const Duration(seconds: 3),
+            backgroundColor: bgColour,
+            width: 350.0,
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ));
+        });
         break;
       case "e":
         print("edit");
