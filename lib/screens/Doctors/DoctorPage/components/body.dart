@@ -39,7 +39,7 @@ class Body extends StatelessWidget {
                   DoctorService.deleteDoctor(doctor.id);
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: remove,
+                  primary: failToastColour,
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
                 ),
                 child: const Text(
