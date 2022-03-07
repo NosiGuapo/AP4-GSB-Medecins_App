@@ -21,7 +21,7 @@ class DoctorService{
 
   static Future<bool> deleteDoctor(int id) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/delete/'+id.toString());
-    final response = await http.post(url);
+    final response = await http.delete(url);
 
     if (response.statusCode == 200){
       return true;
