@@ -1,3 +1,4 @@
+import 'package:ap4_gsbmedecins_appli/components/snackbar.dart';
 import 'package:ap4_gsbmedecins_appli/entities/Doctor.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorList/components/background.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorPage/doctor_screen.dart';
@@ -98,37 +99,18 @@ class _BodyState extends State<Body> {
   void onDismissed(int id, String action) {
     switch (action) {
       case "d":
-        final del = DoctorService.deleteDoctor(id);
-        del.then((value) {
-          // print(value);
+        final delete = DoctorService.deleteDoctor(id);
+        delete.then((value) {
           final String snackMessage;
-          final Color bgColour;
           if (value) {
             snackMessage = "Le médecin a été supprimé avec succès.";
-            bgColour = succeedToastColour;
           } else {
             snackMessage =
                 "Une erreur est survenue lors de la suppression du médecin.";
-            bgColour = failToastColour;
           }
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-              snackMessage,
-              style: const TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 17,
-                fontWeight: FontWeight.w400
-              ),
-            ),
-            duration: const Duration(seconds: 3),
-            backgroundColor: bgColour,
-            width: 350.0,
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(
+              buildSnackBar(value, snackMessage)
+          );
         });
         break;
       case "e":
