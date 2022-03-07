@@ -39,12 +39,12 @@ class Body extends StatelessWidget {
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const SizedBox(height: 55),
+              const SizedBox(height: 45),
               const CircleAvatar(
                 backgroundImage: AssetImage("assets/images/profile.png"),
                 radius: 70,
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 35),
               Text(
                 doctor.prenom + " " + doctor.nom,
                 style: const TextStyle(
@@ -52,7 +52,7 @@ class Body extends StatelessWidget {
                     fontSize: 18,
                     fontFamily: 'Roboto'),
               ),
-              const SizedBox(height: 35),
+              const SizedBox(height: 60),
               ListTile(
                 title: const Text("Adresse"),
                 subtitle: Text(doctor.adresse),
