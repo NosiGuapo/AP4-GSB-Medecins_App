@@ -68,7 +68,7 @@ class _BodyState extends State<Body> {
             motion: const ScrollMotion(),
             children: [
               SlidableAction(
-                backgroundColor: failToastColour,
+                backgroundColor: failSnackbar,
                 icon: Icons.delete,
                 label: "Supprimer",
                 onPressed: (BuildContext context) {

@@ -5,9 +5,9 @@ import 'package:ap4_gsbmedecins_appli/constants.dart';
 SnackBar buildSnackBar(bool isSuccess, String message) {
   Color bgColour;
   if (isSuccess) {
-    bgColour = succeedToastColour;
+    bgColour = successSnackbar;
   } else {
-    bgColour = failToastColour;
+    bgColour = failSnackbar;
   }
   return SnackBar(
     content: Text(
