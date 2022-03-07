@@ -105,12 +105,11 @@ class _BodyState extends State<Body> {
         delete.then((value) {
           final String snackMessage;
           if (value) {
-            snackMessage = "Le médecin "+doctor.prenom+" "+doctor.nom+" a été supprimé avec succès.";
+            snackMessage = "Le médecin ${doctor.prenom} ${doctor.nom} a été supprimé avec succès.";
             // Refreshing the list on delete
             setState(() => doctors.removeAt(index));
           } else {
-            snackMessage =
-                "Une erreur est survenue lors de la suppression du médecin.";
+            snackMessage = "Une erreur est survenue lors de la suppression du médecin.";
           }
           ScaffoldMessenger.of(context).showSnackBar(
               buildSnackBar(value, snackMessage)
