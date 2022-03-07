@@ -8,5 +8,5 @@ const lightBgColour = Color(0xFFF3F4F6);
 const darkBgColour = Color(0xFF222222);
 
 // Buttons
-const failToastColour = Color(0xFFE31A37);
-const succeedToastColour = Color(0xFF2CE27E);
+const failToastColour = Color(0xFFF11F47);
+const succeedToastColour = Color(0xFF2AC36F);
