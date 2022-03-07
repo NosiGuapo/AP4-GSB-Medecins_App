@@ -2,7 +2,7 @@ import 'package:ap4_gsbmedecins_appli/entities/Doctor.dart';
 // import 'package:ap4_gsbmedecins_appli/services/DoctorService.dart';
 import 'package:flutter/material.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorPage/components/background.dart';
-// import '../../../../constants.dart';
+import '../../../../constants.dart';
 
 class Body extends StatelessWidget {
   final Doctor doctor;
@@ -43,6 +43,7 @@ class Body extends StatelessWidget {
               const CircleAvatar(
                 backgroundImage: AssetImage("assets/images/profile.png"),
                 radius: 70,
+                backgroundColor: primaryColour,
               ),
               const SizedBox(height: 35),
               Text(
