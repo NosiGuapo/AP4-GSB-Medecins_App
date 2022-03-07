@@ -21,6 +21,8 @@ class _BodyState extends State<Body> {
     super.initState();
   }
 
+  late List<Doctor> doctors;
+
   @override
   Widget build(BuildContext context) {
     return Background(
@@ -45,8 +47,8 @@ class _BodyState extends State<Body> {
                     if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
                     } else {
-                      final doctors = snapshot.data;
-                      return buildDoctors(doctors!);
+                      doctors = snapshot.data!;
+                      return buildDoctors(doctors);
                     }
                 }
               },
@@ -70,7 +72,7 @@ class _BodyState extends State<Body> {
                 icon: Icons.delete,
                 label: "Supprimer",
                 onPressed: (BuildContext context) {
-                  onDismissed(doctor.id, "d");
+                  onDismissed(doctor, "d", index);
                 },
                 // flex: 1,
               ),
@@ -79,7 +81,7 @@ class _BodyState extends State<Body> {
                 icon: Icons.edit,
                 label: "Modifier",
                 onPressed: (BuildContext context) {
-                  onDismissed(doctor.id, "e");
+                  onDismissed(doctor, "e", index);
                 },
               ),
             ],
@@ -96,14 +98,16 @@ class _BodyState extends State<Body> {
         );
       });
 
-  void onDismissed(int id, String action) {
+  void onDismissed(Doctor doctor, String action, int index) {
     switch (action) {
       case "d":
-        final delete = DoctorService.deleteDoctor(id);
+        final delete = DoctorService.deleteDoctor(doctor.id);
         delete.then((value) {
           final String snackMessage;
           if (value) {
-            snackMessage = "Le médecin a été supprimé avec succès.";
+            snackMessage = "Le médecin "+doctor.prenom+" "+doctor.nom+" a été supprimé avec succès.";
+            // Refreshing the list on delete
+            setState(() => doctors.removeAt(index));
           } else {
             snackMessage =
                 "Une erreur est survenue lors de la suppression du médecin.";
