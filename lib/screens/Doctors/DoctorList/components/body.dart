@@ -36,7 +36,7 @@ class _BodyState extends State<Body> {
                 onChanged: null,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.grey[250],
+                  fillColor: Colors.grey[251],
                   contentPadding: const EdgeInsets.all(0),
                   prefixIcon: Icon(Icons.search, color: Colors.grey.shade500,),
                   border: OutlineInputBorder(
