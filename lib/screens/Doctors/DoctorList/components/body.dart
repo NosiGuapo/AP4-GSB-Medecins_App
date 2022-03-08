@@ -28,8 +28,30 @@ class _BodyState extends State<Body> {
     return Background(
       bg: Scaffold(
           appBar: AppBar(
-            title: const Text('Liste des Médecins'),
-            backgroundColor: primaryColour,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            title: SizedBox(
+              height: 38,
+              child: TextField(
+                onChanged: null,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[250],
+                  contentPadding: const EdgeInsets.all(0),
+                  prefixIcon: Icon(Icons.search, color: Colors.grey.shade500,),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: BorderSide.none
+                  ),
+                  hintStyle: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Roboto',
+                    color: Colors.grey.shade500
+                  ),
+                  hintText: "Rechercher un médecin"
+                ),
+              ),
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.only(top: 10),
