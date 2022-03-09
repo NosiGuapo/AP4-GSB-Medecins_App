@@ -16,12 +16,19 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  late List<Doctor> doctors;
+
   @override
   void initState() {
     super.initState();
   }
 
-  late List<Doctor> doctors;
+  onSearch(String value){
+    print(value);
+    setState(() {
+      doctors.where((doctor) => doctor.nom.toLowerCase().contains(value));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +40,7 @@ class _BodyState extends State<Body> {
             title: SizedBox(
               height: 38,
               child: TextField(
-                onChanged: null,
+                onChanged: (value) => onSearch(value),
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.grey[250],
