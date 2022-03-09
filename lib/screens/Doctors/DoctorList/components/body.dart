@@ -35,21 +35,21 @@ class _BodyState extends State<Body> {
               child: TextField(
                 onChanged: null,
                 decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[250],
-                  contentPadding: const EdgeInsets.all(0),
-                  prefixIcon: Icon(Icons.search, color: Colors.grey.shade500,),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: BorderSide.none
-                  ),
-                  hintStyle: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Roboto',
-                    color: Colors.grey.shade500
-                  ),
-                  hintText: "Rechercher un médecin"
-                ),
+                    filled: true,
+                    fillColor: Colors.grey[250],
+                    contentPadding: const EdgeInsets.all(0),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Colors.grey.shade500,
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                        borderSide: BorderSide.none),
+                    hintStyle: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Roboto',
+                        color: Colors.grey.shade500),
+                    hintText: "Rechercher un médecin"),
               ),
             ),
           ),
@@ -111,6 +111,15 @@ class _BodyState extends State<Body> {
           child: ListTile(
             title: Text(doctor.prenom + " " + doctor.nom),
             subtitle: Text(doctor.adresse),
+            leading: CircleAvatar(
+              child: ClipOval(
+                  child: ColorFiltered(
+                colorFilter:
+                    const ColorFilter.mode(Colors.white54, BlendMode.lighten),
+                child: Image.asset("assets/images/profile.png"),
+              )),
+              backgroundColor: primaryColour,
+            ),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (BuildContext context) => DoctorScreen(doctor: doctor),
@@ -127,15 +136,16 @@ class _BodyState extends State<Body> {
         delete.then((value) {
           final String snackMessage;
           if (value) {
-            snackMessage = "Le médecin ${doctor.prenom} ${doctor.nom} a été supprimé avec succès.";
+            snackMessage =
+                "Le médecin ${doctor.prenom} ${doctor.nom} a été supprimé avec succès.";
             // Refreshing the list on delete
             setState(() => doctors.removeAt(index));
           } else {
-            snackMessage = "Une erreur est survenue lors de la suppression du médecin.";
+            snackMessage =
+                "Une erreur est survenue lors de la suppression du médecin.";
           }
-          ScaffoldMessenger.of(context).showSnackBar(
-              buildSnackBar(value, snackMessage)
-          );
+          ScaffoldMessenger.of(context)
+              .showSnackBar(buildSnackBar(value, snackMessage));
         });
         break;
       case "e":
