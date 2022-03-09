@@ -249,7 +249,52 @@ class DoctorSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return const Text("Bruh");
+    return FutureBuilder<List<Doctor>>(
+      future: DoctorService.getDoctors(query),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Center(
+                child: CircularProgressIndicator(
+                    color: primaryColour, strokeWidth: 2));
+          default:
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return ListView.builder(
+                // physics: const BouncingScrollPhysics(),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    final doctor = snapshot.data![index];
+                    return Slidable(
+                      // Actions on the right part of each slide
+                      child: ListTile(
+                        title: Text(doctor.prenom + " " + doctor.nom),
+                        subtitle: Text(doctor.adresse),
+                        leading: CircleAvatar(
+                          child: ClipOval(
+                              child: ColorFiltered(
+                                colorFilter:
+                                const ColorFilter.mode(
+                                    Colors.white54, BlendMode.lighten),
+                                child: Image.asset("assets/images/profile.png"),
+                              )),
+                          backgroundColor: primaryColour,
+                        ),
+                        onTap: () =>
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    DoctorScreen(doctor: doctor),
+                              ),
+                            ),
+                      ),
+                    );
+                  });
+            }
+        }
+      },
+    );
   }
 
 }
