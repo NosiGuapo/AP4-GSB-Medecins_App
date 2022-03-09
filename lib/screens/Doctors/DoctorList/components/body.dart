@@ -99,7 +99,7 @@ class _BodyState extends State<Body> {
                 // flex: 1,
               ),
               SlidableAction(
-                backgroundColor: Colors.blueAccent,
+                backgroundColor: Colors.deepPurpleAccent.shade400,
                 icon: Icons.edit,
                 label: "Modifier",
                 onPressed: (BuildContext context) {
