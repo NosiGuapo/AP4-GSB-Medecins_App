@@ -178,6 +178,9 @@ class _BodyState extends State<Body> {
 }
 
 class DoctorSearch extends SearchDelegate<String> {
+  final listApp = _BodyState();
+  late List<Doctor> searchDoctors;
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -214,34 +217,8 @@ class DoctorSearch extends SearchDelegate<String> {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              return ListView.builder(
-                  // physics: const BouncingScrollPhysics(),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    final doctor = snapshot.data![index];
-                    return Slidable(
-                      // Actions on the right part of each slide
-                      child: ListTile(
-                        title: Text(doctor.prenom + " " + doctor.nom),
-                        subtitle: Text(doctor.adresse),
-                        leading: CircleAvatar(
-                          child: ClipOval(
-                              child: ColorFiltered(
-                            colorFilter: const ColorFilter.mode(
-                                Colors.white54, BlendMode.lighten),
-                            child: Image.asset("assets/images/profile.png"),
-                          )),
-                          backgroundColor: primaryColour,
-                        ),
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                DoctorScreen(doctor: doctor),
-                          ),
-                        ),
-                      ),
-                    );
-                  });
+              searchDoctors = snapshot.data!;
+              return listApp.buildDoctors(searchDoctors);
             }
         }
       },
@@ -266,34 +243,8 @@ class DoctorSearch extends SearchDelegate<String> {
             } else if (snapshot.data!.isEmpty) {
               return noSuggestionBuild();
             } else {
-              return ListView.builder(
-                  // physics: const BouncingScrollPhysics(),
-                  itemCount: snapshot.data?.length,
-                  itemBuilder: (context, index) {
-                    final doctor = snapshot.data![index];
-                    return Slidable(
-                      // Actions on the right part of each slide
-                      child: ListTile(
-                        title: Text(doctor.prenom + " " + doctor.nom),
-                        subtitle: Text(doctor.adresse),
-                        leading: CircleAvatar(
-                          child: ClipOval(
-                              child: ColorFiltered(
-                            colorFilter: const ColorFilter.mode(
-                                Colors.white54, BlendMode.lighten),
-                            child: Image.asset("assets/images/profile.png"),
-                          )),
-                          backgroundColor: primaryColour,
-                        ),
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                DoctorScreen(doctor: doctor),
-                          ),
-                        ),
-                      ),
-                    );
-                  });
+              searchDoctors = snapshot.data!;
+              return listApp.buildDoctors(searchDoctors);
             }
         }
       },
