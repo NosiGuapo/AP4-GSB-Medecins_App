@@ -91,6 +91,8 @@ class _BodyState extends State<Body> {
 
   Widget buildDoctors(List<Doctor> doctors) => RefreshIndicator(
     onRefresh: listRefresh,
+    color: primaryColour,
+    strokeWidth: 2,
     child: ListView.builder(
       // physics: const BouncingScrollPhysics(),
         itemCount: doctors.length,
