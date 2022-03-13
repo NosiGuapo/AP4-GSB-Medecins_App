@@ -89,55 +89,62 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget buildDoctors(List<Doctor> doctors) => ListView.builder(
+  Widget buildDoctors(List<Doctor> doctors) => RefreshIndicator(
+    onRefresh: listRefresh,
+    child: ListView.builder(
       // physics: const BouncingScrollPhysics(),
-      itemCount: doctors.length,
-      itemBuilder: (context, index) {
-        final doctor = doctors[index];
-        return Slidable(
-          // Actions on the right part of each slide
-          endActionPane: ActionPane(
-            motion: const ScrollMotion(),
-            children: [
-              SlidableAction(
-                backgroundColor: failSnackbar,
-                icon: Icons.delete,
-                label: "Supprimer",
-                onPressed: (BuildContext context) {
-                  onDismissed(doctor, "d", index);
-                },
-                // flex: 1,
-              ),
-              SlidableAction(
-                backgroundColor: Colors.deepPurpleAccent.shade400,
-                icon: Icons.edit,
-                label: "Modifier",
-                onPressed: (BuildContext context) {
-                  onDismissed(doctor, "e", index);
-                },
-              ),
-            ],
-          ),
-          child: ListTile(
-            title: Text(doctor.prenom + " " + doctor.nom),
-            subtitle: Text(doctor.adresse),
-            leading: CircleAvatar(
-              child: ClipOval(
-                  child: ColorFiltered(
-                colorFilter:
-                    const ColorFilter.mode(Colors.white54, BlendMode.lighten),
-                child: Image.asset("assets/images/profile.png"),
-              )),
-              backgroundColor: primaryColour,
+        itemCount: doctors.length,
+        itemBuilder: (context, index) {
+          final doctor = doctors[index];
+          return Slidable(
+            // Actions on the right part of each slide
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                SlidableAction(
+                  backgroundColor: failSnackbar,
+                  icon: Icons.delete,
+                  label: "Supprimer",
+                  onPressed: (BuildContext context) {
+                    onDismissed(doctor, "d", index);
+                  },
+                  // flex: 1,
+                ),
+                SlidableAction(
+                  backgroundColor: Colors.deepPurpleAccent.shade400,
+                  icon: Icons.edit,
+                  label: "Modifier",
+                  onPressed: (BuildContext context) {
+                    onDismissed(doctor, "e", index);
+                  },
+                ),
+              ],
             ),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => DoctorScreen(doctor: doctor),
+            child: ListTile(
+              title: Text(doctor.prenom + " " + doctor.nom),
+              subtitle: Text(doctor.adresse),
+              leading: CircleAvatar(
+                child: ClipOval(
+                    child: ColorFiltered(
+                      colorFilter:
+                      const ColorFilter.mode(Colors.white54, BlendMode.lighten),
+                      child: Image.asset("assets/images/profile.png"),
+                    )),
+                backgroundColor: primaryColour,
+              ),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => DoctorScreen(doctor: doctor),
+                ),
               ),
             ),
-          ),
-        );
-      });
+          );
+        }),
+  );
+
+  Future listRefresh() async {
+    setState(() => doctors.clear());
+  }
 
   void onDismissed(Doctor doctor, String action, int index) {
     switch (action) {
