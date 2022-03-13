@@ -35,17 +35,13 @@ class _BodyState extends State<Body> {
                   onPressed: () {
                     showSearch(context: context, delegate: DoctorSearch());
                   },
-                  icon: const Icon(Icons.search, color: Colors.grey)
-              ),
+                  icon: const Icon(Icons.search, color: Colors.grey)),
             ],
             title: const SizedBox(
               child: Text(
                 "Liste de médecins",
                 style: TextStyle(
-                    fontFamily: 'Roboto',
-                    color: Colors.black,
-                    fontSize: 19
-                ),
+                    fontFamily: 'Roboto', color: Colors.black, fontSize: 19),
               ),
               // height: 38,
               // child: TextField(
@@ -93,59 +89,55 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget buildDoctors(List<Doctor> doctors) =>
-      ListView.builder(
-        // physics: const BouncingScrollPhysics(),
-          itemCount: doctors.length,
-          itemBuilder: (context, index) {
-            final doctor = doctors[index];
-            return Slidable(
-              // Actions on the right part of each slide
-              endActionPane: ActionPane(
-                motion: const ScrollMotion(),
-                children: [
-                  SlidableAction(
-                    backgroundColor: failSnackbar,
-                    icon: Icons.delete,
-                    label: "Supprimer",
-                    onPressed: (BuildContext context) {
-                      onDismissed(doctor, "d", index);
-                    },
-                    // flex: 1,
-                  ),
-                  SlidableAction(
-                    backgroundColor: Colors.deepPurpleAccent.shade400,
-                    icon: Icons.edit,
-                    label: "Modifier",
-                    onPressed: (BuildContext context) {
-                      onDismissed(doctor, "e", index);
-                    },
-                  ),
-                ],
+  Widget buildDoctors(List<Doctor> doctors) => ListView.builder(
+      // physics: const BouncingScrollPhysics(),
+      itemCount: doctors.length,
+      itemBuilder: (context, index) {
+        final doctor = doctors[index];
+        return Slidable(
+          // Actions on the right part of each slide
+          endActionPane: ActionPane(
+            motion: const ScrollMotion(),
+            children: [
+              SlidableAction(
+                backgroundColor: failSnackbar,
+                icon: Icons.delete,
+                label: "Supprimer",
+                onPressed: (BuildContext context) {
+                  onDismissed(doctor, "d", index);
+                },
+                // flex: 1,
               ),
-              child: ListTile(
-                title: Text(doctor.prenom + " " + doctor.nom),
-                subtitle: Text(doctor.adresse),
-                leading: CircleAvatar(
-                  child: ClipOval(
-                      child: ColorFiltered(
-                        colorFilter:
-                        const ColorFilter.mode(
-                            Colors.white54, BlendMode.lighten),
-                        child: Image.asset("assets/images/profile.png"),
-                      )),
-                  backgroundColor: primaryColour,
-                ),
-                onTap: () =>
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            DoctorScreen(doctor: doctor),
-                      ),
-                    ),
+              SlidableAction(
+                backgroundColor: Colors.deepPurpleAccent.shade400,
+                icon: Icons.edit,
+                label: "Modifier",
+                onPressed: (BuildContext context) {
+                  onDismissed(doctor, "e", index);
+                },
               ),
-            );
-          });
+            ],
+          ),
+          child: ListTile(
+            title: Text(doctor.prenom + " " + doctor.nom),
+            subtitle: Text(doctor.adresse),
+            leading: CircleAvatar(
+              child: ClipOval(
+                  child: ColorFiltered(
+                colorFilter:
+                    const ColorFilter.mode(Colors.white54, BlendMode.lighten),
+                child: Image.asset("assets/images/profile.png"),
+              )),
+              backgroundColor: primaryColour,
+            ),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) => DoctorScreen(doctor: doctor),
+              ),
+            ),
+          ),
+        );
+      });
 
   void onDismissed(Doctor doctor, String action, int index) {
     switch (action) {
@@ -155,13 +147,12 @@ class _BodyState extends State<Body> {
           final String snackMessage;
           if (value) {
             snackMessage =
-            "Le médecin ${doctor.prenom} ${doctor
-                .nom} a été supprimé avec succès.";
+                "Le médecin ${doctor.prenom} ${doctor.nom} a été supprimé avec succès.";
             // Refreshing the list on delete
             setState(() => doctors.removeAt(index));
           } else {
             snackMessage =
-            "Une erreur est survenue lors de la suppression du médecin.";
+                "Une erreur est survenue lors de la suppression du médecin.";
           }
           ScaffoldMessenger.of(context)
               .showSnackBar(buildSnackBar(value, snackMessage));
@@ -181,20 +172,22 @@ class DoctorSearch extends SearchDelegate<String> {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      IconButton(onPressed: () {
-        query = "";
-      }, icon: const Icon(Icons.clear))
+      IconButton(
+          onPressed: () {
+            query = "";
+          },
+          icon: const Icon(Icons.clear))
     ];
   }
 
   @override
   Widget? buildLeading(BuildContext context) {
-    return IconButton(onPressed: () {
-      close(context, '');
-    },
+    return IconButton(
+      onPressed: () {
+        close(context, '');
+      },
       icon: AnimatedIcon(
-          icon: AnimatedIcons.menu_arrow,
-          progress: transitionAnimation),
+          icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
     );
   }
 
@@ -213,7 +206,7 @@ class DoctorSearch extends SearchDelegate<String> {
               return const Center(child: CircularProgressIndicator());
             } else {
               return ListView.builder(
-                // physics: const BouncingScrollPhysics(),
+                  // physics: const BouncingScrollPhysics(),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     final doctor = snapshot.data![index];
@@ -225,20 +218,18 @@ class DoctorSearch extends SearchDelegate<String> {
                         leading: CircleAvatar(
                           child: ClipOval(
                               child: ColorFiltered(
-                                colorFilter:
-                                const ColorFilter.mode(
-                                    Colors.white54, BlendMode.lighten),
-                                child: Image.asset("assets/images/profile.png"),
-                              )),
+                            colorFilter: const ColorFilter.mode(
+                                Colors.white54, BlendMode.lighten),
+                            child: Image.asset("assets/images/profile.png"),
+                          )),
                           backgroundColor: primaryColour,
                         ),
-                        onTap: () =>
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    DoctorScreen(doctor: doctor),
-                              ),
-                            ),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                DoctorScreen(doctor: doctor),
+                          ),
+                        ),
                       ),
                     );
                   });
@@ -253,6 +244,8 @@ class DoctorSearch extends SearchDelegate<String> {
     return FutureBuilder<List<Doctor>>(
       future: DoctorService.getDoctors(query),
       builder: (context, snapshot) {
+        if (query.isEmpty) return noSuggestionBuild();
+
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return const Center(
@@ -261,10 +254,12 @@ class DoctorSearch extends SearchDelegate<String> {
           default:
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.data!.isEmpty) {
+              return noSuggestionBuild();
             } else {
               return ListView.builder(
-                // physics: const BouncingScrollPhysics(),
-                  itemCount: snapshot.data!.length,
+                  // physics: const BouncingScrollPhysics(),
+                  itemCount: snapshot.data?.length,
                   itemBuilder: (context, index) {
                     final doctor = snapshot.data![index];
                     return Slidable(
@@ -275,20 +270,18 @@ class DoctorSearch extends SearchDelegate<String> {
                         leading: CircleAvatar(
                           child: ClipOval(
                               child: ColorFiltered(
-                                colorFilter:
-                                const ColorFilter.mode(
-                                    Colors.white54, BlendMode.lighten),
-                                child: Image.asset("assets/images/profile.png"),
-                              )),
+                            colorFilter: const ColorFilter.mode(
+                                Colors.white54, BlendMode.lighten),
+                            child: Image.asset("assets/images/profile.png"),
+                          )),
                           backgroundColor: primaryColour,
                         ),
-                        onTap: () =>
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    DoctorScreen(doctor: doctor),
-                              ),
-                            ),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                DoctorScreen(doctor: doctor),
+                          ),
+                        ),
                       ),
                     );
                   });
@@ -298,4 +291,11 @@ class DoctorSearch extends SearchDelegate<String> {
     );
   }
 
+  Widget noSuggestionBuild() {
+    return const Center(
+        child: Text(
+      'Aucun résultat',
+      style: TextStyle(fontFamily: 'Roboto', fontSize: 17),
+    ));
+  }
 }
