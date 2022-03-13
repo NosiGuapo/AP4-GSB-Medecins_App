@@ -42,30 +42,38 @@ class _BodyState extends State<Body> {
                   onPressed: () {
                     showSearch(context: context, delegate: DoctorSearch());
                   },
-                  icon: const Icon(Icons.search, color: Colors.red)
+                  icon: const Icon(Icons.search, color: Colors.grey)
               ),
             ],
-            title: SizedBox(
-              height: 38,
-              child: TextField(
-                onChanged: (value) => onSearch(value),
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[250],
-                    contentPadding: const EdgeInsets.all(0),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: Colors.grey.shade500,
-                    ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide.none),
-                    hintStyle: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Roboto',
-                        color: Colors.grey.shade500),
-                    hintText: "Rechercher un médecin"),
+            title: const SizedBox(
+              child: Text(
+                "Liste de médecins",
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  color: Colors.black,
+                  fontSize: 19
+                ),
               ),
+              // height: 38,
+              // child: TextField(
+              //   onChanged: (value) => onSearch(value),
+              //   decoration: InputDecoration(
+              //       filled: true,
+              //       fillColor: Colors.grey[250],
+              //       contentPadding: const EdgeInsets.all(0),
+              //       prefixIcon: Icon(
+              //         Icons.search,
+              //         color: Colors.grey.shade500,
+              //       ),
+              //       border: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(50),
+              //           borderSide: BorderSide.none),
+              //       hintStyle: TextStyle(
+              //           fontSize: 16,
+              //           fontFamily: 'Roboto',
+              //           color: Colors.grey.shade500),
+              //       hintText: "Rechercher un médecin"),
+              // ),
             ),
           ),
           body: Padding(
