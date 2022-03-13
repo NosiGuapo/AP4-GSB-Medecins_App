@@ -42,7 +42,7 @@ class _BodyState extends State<Body> {
                   onPressed: () {
                     showSearch(context: context, delegate: DoctorSearch());
                   },
-                  icon: const Icon(Icons.search, color: Colors.blue)
+                  icon: const Icon(Icons.search, color: Colors.green)
               ),
             ],
             title: SizedBox(
