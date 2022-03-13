@@ -179,7 +179,6 @@ class _BodyState extends State<Body> {
 
 class DoctorSearch extends SearchDelegate<String> {
   final listApp = _BodyState();
-  late List<Doctor> searchDoctors;
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -217,8 +216,7 @@ class DoctorSearch extends SearchDelegate<String> {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              searchDoctors = snapshot.data!;
-              return listApp.buildDoctors(searchDoctors);
+              return listApp.buildDoctors(snapshot.data!.toList());
             }
         }
       },
@@ -243,8 +241,7 @@ class DoctorSearch extends SearchDelegate<String> {
             } else if (snapshot.data!.isEmpty) {
               return noSuggestionBuild();
             } else {
-              searchDoctors = snapshot.data!;
-              return listApp.buildDoctors(searchDoctors);
+              return listApp.buildDoctors(snapshot.data!.toList());
             }
         }
       },
