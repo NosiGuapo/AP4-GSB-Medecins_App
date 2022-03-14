@@ -71,22 +71,6 @@ class Body extends StatelessWidget {
                 ),
                 leading: const Icon(Icons.medical_services),
               ),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     DoctorService.deleteDoctor(doctor.id);
-              //   },
-              //   style: ElevatedButton.styleFrom(
-              //     primary: failToastColour,
-              //     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
-              //   ),
-              //   child: const Text(
-              //     "Supprimer",
-              //     style: TextStyle(
-              //       fontFamily: 'Roboto',
-              //       fontSize: 17
-              //     ),
-              //   ),
-              // )
             ],
           ),
         ),
