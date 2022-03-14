@@ -90,59 +90,60 @@ class _BodyState extends State<Body> {
   }
 
   Widget buildDoctors(List<Doctor> doctors) => RefreshIndicator(
-    onRefresh: listRefresh,
-    color: primaryColour,
-    strokeWidth: 2,
-    child: ListView.builder(
-      // physics: const BouncingScrollPhysics(),
-        itemCount: doctors.length,
-        itemBuilder: (context, index) {
-          final doctor = doctors[index];
-          return Slidable(
-            // Actions on the right part of each slide
-            endActionPane: ActionPane(
-              motion: const ScrollMotion(),
-              children: [
-                SlidableAction(
-                  backgroundColor: failSnackbar,
-                  icon: Icons.delete,
-                  label: "Supprimer",
-                  onPressed: (BuildContext context) {
-                    onDismissed(doctor, "d", index);
-                  },
-                  // flex: 1,
+        onRefresh: listRefresh,
+        color: primaryColour,
+        strokeWidth: 2,
+        child: ListView.builder(
+            // physics: const BouncingScrollPhysics(),
+            itemCount: doctors.length,
+            itemBuilder: (context, index) {
+              final doctor = doctors[index];
+              return Slidable(
+                // Actions on the right part of each slide
+                endActionPane: ActionPane(
+                  motion: const ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      backgroundColor: failSnackbar,
+                      icon: Icons.delete,
+                      label: "Supprimer",
+                      onPressed: (BuildContext context) {
+                        onDismissed(doctor, "d", index);
+                      },
+                      // flex: 1,
+                    ),
+                    SlidableAction(
+                      backgroundColor: Colors.deepPurpleAccent.shade400,
+                      icon: Icons.edit,
+                      label: "Modifier",
+                      onPressed: (BuildContext context) {
+                        onDismissed(doctor, "e", index);
+                      },
+                    ),
+                  ],
                 ),
-                SlidableAction(
-                  backgroundColor: Colors.deepPurpleAccent.shade400,
-                  icon: Icons.edit,
-                  label: "Modifier",
-                  onPressed: (BuildContext context) {
-                    onDismissed(doctor, "e", index);
-                  },
-                ),
-              ],
-            ),
-            child: ListTile(
-              title: Text(doctor.prenom + " " + doctor.nom),
-              subtitle: Text(doctor.adresse),
-              leading: CircleAvatar(
-                child: ClipOval(
-                    child: ColorFiltered(
-                      colorFilter:
-                      const ColorFilter.mode(Colors.white54, BlendMode.lighten),
+                child: ListTile(
+                  title: Text(doctor.prenom + " " + doctor.nom),
+                  subtitle: Text(doctor.adresse),
+                  leading: CircleAvatar(
+                    child: ClipOval(
+                        child: ColorFiltered(
+                      colorFilter: const ColorFilter.mode(
+                          Colors.white54, BlendMode.lighten),
                       child: Image.asset("assets/images/profile.png"),
                     )),
-                backgroundColor: primaryColour,
-              ),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => DoctorScreen(doctor: doctor),
+                    backgroundColor: primaryColour,
+                  ),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          DoctorScreen(doctor: doctor),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-        }),
-  );
+              );
+            }),
+      );
 
   Future listRefresh() async {
     setState(() => doctors.clear());
@@ -164,7 +165,8 @@ class _BodyState extends State<Body> {
             snackMessage =
                 "Une erreur est survenue lors de la suppression du médecin.";
           }
-          ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(value, snackMessage));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(buildSnackBar(value, snackMessage));
         });
         break;
       case "e":
@@ -182,6 +184,7 @@ class DoctorSearch extends SearchDelegate<String> {
 
   @override
   List<Widget>? buildActions(BuildContext context) {
+    // Cross icon - Clears field query
     return [
       IconButton(
           onPressed: () {
@@ -193,6 +196,7 @@ class DoctorSearch extends SearchDelegate<String> {
 
   @override
   Widget? buildLeading(BuildContext context) {
+    // Arrow icon - Go back to the previous page (doctor list)
     return IconButton(
       onPressed: () {
         close(context, '');
@@ -225,29 +229,11 @@ class DoctorSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return FutureBuilder<List<Doctor>>(
-      future: DoctorService.getDoctors(query),
-      builder: (context, snapshot) {
-        if (query.isEmpty) return noSuggestionBuild();
-
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Center(
-                child: CircularProgressIndicator(
-                    color: primaryColour, strokeWidth: 2));
-          default:
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.data!.isEmpty) {
-              return noSuggestionBuild();
-            } else {
-              return listApp.buildDoctors(snapshot.data!.toList());
-            }
-        }
-      },
-    );
+    // We want the same display, we can directly use the result FutureBuilder instead of making an useless one
+    return buildResults(context);
   }
 
+  // No result matching - We alert the user with a small message
   Widget noSuggestionBuild() {
     return const Center(
         child: Text(
