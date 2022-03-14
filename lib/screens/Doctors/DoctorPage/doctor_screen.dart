@@ -4,15 +4,24 @@ import 'components/body.dart';
 
 class DoctorScreen extends StatelessWidget {
   final Doctor doctor;
+  final bool editPage;
+
   const DoctorScreen({
     Key? key,
-    required this.doctor
+    required this.doctor,
+    this.editPage = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Body(doctor: doctor),
-    );
+    if (editPage){
+      return Scaffold(
+        body: EditBody(doctor: doctor),
+      );
+    } else {
+      return Scaffold(
+        body: DetailBody(doctor: doctor),
+      );
+    }
   }
 }

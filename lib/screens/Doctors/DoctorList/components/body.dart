@@ -170,7 +170,12 @@ class _BodyState extends State<Body> {
         });
         break;
       case "e":
-        print("edit");
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) =>
+                DoctorScreen(doctor: doctor, editPage: true),
+          ),
+        );
         break;
       default:
         print("aaa");
