@@ -158,13 +158,13 @@ class _BodyState extends State<Body> {
             snackMessage =
                 "Le médecin ${doctor.prenom} ${doctor.nom} a été supprimé avec succès.";
             // Refreshing the list on delete
-            setState(() => doctors.removeAt(index));
+            // setState(() => doctors.removeAt(index));
+            setState(() => doctors.clear());
           } else {
             snackMessage =
                 "Une erreur est survenue lors de la suppression du médecin.";
           }
-          ScaffoldMessenger.of(context)
-              .showSnackBar(buildSnackBar(value, snackMessage));
+          ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(value, snackMessage));
         });
         break;
       case "e":
