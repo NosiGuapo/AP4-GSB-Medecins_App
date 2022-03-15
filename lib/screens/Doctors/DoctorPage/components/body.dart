@@ -157,7 +157,7 @@ class _EditBodyState extends State<EditBody> {
                   initialValue: widget.doctor.tel,
                   hint: "0637645529",
                   validator: (value) {
-                    if (value != null && value.length < 10 ) {
+                    if (value != null && value.length < 10) {
                       return "Le numéro de téléphone doit contenir plus de 9 caractères.";
                     } else {
                       // Regex:
@@ -170,12 +170,11 @@ class _EditBodyState extends State<EditBody> {
                 ),
                 const SizedBox(height: 25),
                 buildFormInput(
-                  name: "Spécialité",
-                  icon: Icons.medical_services,
-                  initialValue: widget.doctor.spec,
-                  hint: "Oncologie",
-                  validator: (value) {}
-                ),
+                    name: "Spécialité",
+                    icon: Icons.medical_services,
+                    initialValue: widget.doctor.spec,
+                    hint: "Oncologie",
+                    validator: (value) {}),
                 const SizedBox(height: 55),
                 ElevatedButton(
                     onPressed: () {
@@ -195,20 +194,24 @@ class _EditBodyState extends State<EditBody> {
       ),
     );
   }
+
   Widget buildFormInput({
     required String name,
     required IconData icon,
     String? initialValue,
     String? hint,
     required String? Function(dynamic value) validator,
-  }) => TextFormField(
-    decoration: InputDecoration(
-      labelText: name,
-      prefixIcon: Icon(icon),
-      border: null,
-      hintText: hint,
-    ),
-    initialValue: initialValue,
-    validator: validator,
-  );
+  }) =>
+      TextFormField(
+        decoration: InputDecoration(
+          labelText: name,
+          labelStyle: const TextStyle(fontFamily: 'Roboto', fontSize: 15),
+          prefixIcon: Icon(icon),
+          border: null,
+          hintText: hint,
+        ),
+        initialValue: initialValue,
+        validator: validator,
+        style: const TextStyle(fontFamily: 'Roboto', fontSize: 12),
+      );
 }
