@@ -114,6 +114,9 @@ class _EditBodyState extends State<EditBody> {
                   icon: Icons.person,
                   initialValue: widget.doctor.nom,
                   hint: "Durand",
+                  saves: (value) {
+                    setState(() => widget.doctor.nom = value);
+                  },
                   validator: (value) {
                     if (value != null && value.length < 2) {
                       return "Le nom doit contenir au moins 2 caractères.";
@@ -128,6 +131,9 @@ class _EditBodyState extends State<EditBody> {
                   icon: Icons.person,
                   initialValue: widget.doctor.prenom,
                   hint: "Samuel",
+                  saves: (value) {
+                    setState(() => widget.doctor.prenom = value);
+                  },
                   validator: (value) {
                     if (value != null && value.length < 2) {
                       return "Le prénom doit contenir au moins 2 caractères.";
@@ -142,6 +148,9 @@ class _EditBodyState extends State<EditBody> {
                   icon: Icons.home,
                   initialValue: widget.doctor.adresse,
                   hint: "41 rue de Valmy MONTREUIL 93100",
+                  saves: (value) {
+                    setState(() => widget.doctor.adresse = value);
+                  },
                   validator: (value) {
                     if (value != null && value.length < 10) {
                       return "L'adresse doit contenir au moins une dizaine de caractères.";
@@ -156,6 +165,9 @@ class _EditBodyState extends State<EditBody> {
                   icon: Icons.phone,
                   initialValue: widget.doctor.tel,
                   hint: "0637645529",
+                  saves: (value) {
+                    setState(() => widget.doctor.tel = value);
+                  },
                   validator: (value) {
                     if (value != null && value.length < 10) {
                       return "Le numéro de téléphone doit contenir plus de 9 caractères.";
@@ -170,11 +182,15 @@ class _EditBodyState extends State<EditBody> {
                 ),
                 const SizedBox(height: 25),
                 buildFormInput(
-                    name: "Spécialité",
-                    icon: Icons.medical_services,
-                    initialValue: widget.doctor.spec,
-                    hint: "Oncologie",
-                    validator: (value) {}),
+                  name: "Spécialité",
+                  icon: Icons.medical_services,
+                  initialValue: widget.doctor.spec,
+                  hint: "Oncologie",
+                  saves: (value) {
+                    setState(() => widget.doctor.spec = value);
+                  },
+                  validator: (value) {},
+                ),
                 const SizedBox(height: 55),
                 buildSubmit()
               ],
@@ -191,6 +207,7 @@ class _EditBodyState extends State<EditBody> {
     String? initialValue,
     String? hint,
     required String? Function(dynamic value) validator,
+    required String? Function(dynamic value) saves,
   }) =>
       TextFormField(
         decoration: InputDecoration(
@@ -202,18 +219,19 @@ class _EditBodyState extends State<EditBody> {
         ),
         initialValue: initialValue,
         validator: validator,
+        onSaved: saves,
         style: const TextStyle(fontFamily: 'Roboto', fontSize: 12),
       );
 
   Widget buildSubmit() => ElevatedButton(
-      onPressed: () {
-        // Will be in charge of validating the form fields
-        final isValid = formKey.currentState!.validate();
-        if (isValid) {
-          // The form is valid, we push to the next page or action
-          print("valid");
-        }
-      },
-      child: const Text("Modifier"),
-  );
+        onPressed: () {
+          // Will be in charge of validating the form fields
+          final isValid = formKey.currentState!.validate();
+          if (isValid) {
+            // The form is valid, we push to the next page or action
+            formKey.currentState?.save();
+          }
+        },
+        child: const Text("Modifier"),
+      );
 }
