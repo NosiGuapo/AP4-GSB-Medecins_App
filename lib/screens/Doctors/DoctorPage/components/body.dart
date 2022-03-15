@@ -114,8 +114,9 @@ class _EditBodyState extends State<EditBody> {
                       labelText: "Nom",
                       prefixIcon: Icon(Icons.person),
                       border: null,
-                      hintText: "Durand"
+                      hintText: "Durand",
                   ),
+                  initialValue: widget.doctor.nom,
                   validator: (value) {
                     if (value != null && value.length < 2) {
                       return "Le nom doit contenir au moins 2 caractères.";
