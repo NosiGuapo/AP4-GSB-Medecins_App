@@ -73,10 +73,17 @@ class DetailBody extends StatelessWidget {
   }
 }
 
-class EditBody extends StatelessWidget {
-  final Doctor doctor;
+class EditBody extends StatefulWidget {
+  Doctor doctor;
 
-  const EditBody({required this.doctor, Key? key}) : super(key: key);
+  EditBody({required this.doctor, Key? key}) : super(key: key);
+
+  @override
+  State<EditBody> createState() => _EditBodyState();
+}
+
+class _EditBodyState extends State<EditBody> {
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +91,7 @@ class EditBody extends StatelessWidget {
       bg: Scaffold(
         appBar: AppBar(
           title: Text(
-            "Modifier le médecin: ${doctor.prenom} ${doctor.nom}",
+            "Modifier le médecin: ${widget.doctor.prenom} ${widget.doctor.nom}",
             style: const TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.bold,
@@ -97,6 +104,7 @@ class EditBody extends StatelessWidget {
         ),
         body: Center(
           child: Form(
+            key: formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: ListView(
               padding: const EdgeInsets.all(16),
@@ -106,7 +114,8 @@ class EditBody extends StatelessWidget {
                       labelText: "Nom",
                       prefixIcon: Icon(Icons.person),
                       border: null,
-                      hintText: "Durand"),
+                      hintText: "Durand"
+                  ),
                   validator: (value) {
                     if (value != null && value.length < 2) {
                       return "Le nom doit contenir au moins 2 caractères.";
@@ -116,7 +125,15 @@ class EditBody extends StatelessWidget {
                     }
                   },
                 ),
-                const ElevatedButton(onPressed: null, child: Text("Modifier")),
+                ElevatedButton(onPressed: () {
+                  // Will be in charge of validating the form fields
+                  final isValid = formKey.currentState!.validate();
+
+                  // The form is valid, we push to the next page or action
+                  if (isValid){
+                    print("valid");
+                  }
+                }, child: Text("Modifier")),
               ],
             ),
           ),
