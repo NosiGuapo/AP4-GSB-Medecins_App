@@ -176,17 +176,7 @@ class _EditBodyState extends State<EditBody> {
                     hint: "Oncologie",
                     validator: (value) {}),
                 const SizedBox(height: 55),
-                ElevatedButton(
-                    onPressed: () {
-                      // Will be in charge of validating the form fields
-                      final isValid = formKey.currentState!.validate();
-
-                      // The form is valid, we push to the next page or action
-                      if (isValid) {
-                        print("valid");
-                      }
-                    },
-                    child: const Text("Modifier")),
+                buildSubmit()
               ],
             ),
           ),
@@ -214,4 +204,16 @@ class _EditBodyState extends State<EditBody> {
         validator: validator,
         style: const TextStyle(fontFamily: 'Roboto', fontSize: 12),
       );
+
+  Widget buildSubmit() => ElevatedButton(
+      onPressed: () {
+        // Will be in charge of validating the form fields
+        final isValid = formKey.currentState!.validate();
+        if (isValid) {
+          // The form is valid, we push to the next page or action
+          print("valid");
+        }
+      },
+      child: const Text("Modifier"),
+  );
 }
