@@ -168,6 +168,7 @@ class _EditBodyState extends State<EditBody> {
                   saves: (value) {
                     setState(() => widget.doctor.tel = value);
                   },
+                  max: 15,
                   validator: (value) {
                     if (value != null && value.length < 10) {
                       return "Le numéro de téléphone doit contenir plus de 9 caractères.";
@@ -179,6 +180,7 @@ class _EditBodyState extends State<EditBody> {
                       return null;
                     }
                   },
+
                 ),
                 const SizedBox(height: 25),
                 buildFormInput(
@@ -208,6 +210,7 @@ class _EditBodyState extends State<EditBody> {
     String? hint,
     required String? Function(dynamic value) validator,
     required String? Function(dynamic value) saves,
+    int? max,
   }) =>
       TextFormField(
         decoration: InputDecoration(
@@ -217,6 +220,7 @@ class _EditBodyState extends State<EditBody> {
           border: null,
           hintText: hint,
         ),
+        maxLength: max,
         initialValue: initialValue,
         validator: validator,
         onSaved: saves,
@@ -230,6 +234,8 @@ class _EditBodyState extends State<EditBody> {
           if (isValid) {
             // The form is valid, we push to the next page or action
             formKey.currentState?.save();
+            // Unfocus all input fields on validation
+            FocusScope.of(context).unfocus();
           }
         },
         child: const Text("Modifier"),
