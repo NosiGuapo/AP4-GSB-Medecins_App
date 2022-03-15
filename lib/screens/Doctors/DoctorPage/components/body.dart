@@ -111,10 +111,10 @@ class _EditBodyState extends State<EditBody> {
               children: <Widget>[
                 TextFormField(
                   decoration: const InputDecoration(
-                      labelText: "Nom",
-                      prefixIcon: Icon(Icons.person),
-                      border: null,
-                      hintText: "Durand",
+                    labelText: "Nom",
+                    prefixIcon: Icon(Icons.person),
+                    border: null,
+                    hintText: "Durand",
                   ),
                   initialValue: widget.doctor.nom,
                   validator: (value) {
@@ -126,15 +126,83 @@ class _EditBodyState extends State<EditBody> {
                     }
                   },
                 ),
-                ElevatedButton(onPressed: () {
-                  // Will be in charge of validating the form fields
-                  final isValid = formKey.currentState!.validate();
+                const SizedBox(height: 25),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: "Prénom",
+                    prefixIcon: Icon(Icons.person),
+                    border: null,
+                    hintText: "Samuel",
+                  ),
+                  initialValue: widget.doctor.prenom,
+                  validator: (value) {
+                    if (value != null && value.length < 2) {
+                      return "Le prénom doit contenir au moins 2 caractères.";
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                const SizedBox(height: 25),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: "Adresse",
+                    prefixIcon: Icon(Icons.home),
+                    border: null,
+                    hintText: "41 rue de Valmy MONTREUIL 93100",
+                  ),
+                  initialValue: widget.doctor.adresse,
+                  validator: (value) {
+                    if (value != null && value.length < 10) {
+                      return "L'adresse doit contenir au moins une dizaine de caractères.";
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                const SizedBox(height: 25),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: "Téléphone",
+                    prefixIcon: Icon(Icons.phone),
+                    border: null,
+                    hintText: "0637645529",
+                  ),
+                  initialValue: widget.doctor.tel,
+                  validator: (value) {
+                    if (value != null && value.length < 10) {
+                      return "L'adresse doit contenir au moins une dizaine de caractères.";
+                    } else {
+                      // Regex:
+                      // | Phone number needs to start with a 0
+                      // | Phone number needs to be between 10 and 15 characters long
+                      // | Phone needs to contain digits only
+                      return null;
+                    }
+                  },
+                ),
+                const SizedBox(height: 25),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: "Spécialité",
+                    prefixIcon: Icon(Icons.medical_services),
+                    border: null,
+                    hintText: "Oncologie",
+                  ),
+                  initialValue: widget.doctor.spec,
+                ),
+                const SizedBox(height: 55),
+                ElevatedButton(
+                    onPressed: () {
+                      // Will be in charge of validating the form fields
+                      final isValid = formKey.currentState!.validate();
 
-                  // The form is valid, we push to the next page or action
-                  if (isValid){
-                    print("valid");
-                  }
-                }, child: Text("Modifier")),
+                      // The form is valid, we push to the next page or action
+                      if (isValid) {
+                        print("valid");
+                      }
+                    },
+                    child: Text("Modifier")),
               ],
             ),
           ),
