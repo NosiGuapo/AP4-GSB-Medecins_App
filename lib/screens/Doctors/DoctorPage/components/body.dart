@@ -109,32 +109,25 @@ class _EditBodyState extends State<EditBody> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: <Widget>[
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Nom",
-                    prefixIcon: Icon(Icons.person),
-                    border: null,
-                    hintText: "Durand",
-                  ),
+                buildFormInput(
+                  name: "Nom",
+                  icon: Icons.person,
                   initialValue: widget.doctor.nom,
+                  hint: "Durand",
                   validator: (value) {
                     if (value != null && value.length < 2) {
                       return "Le nom doit contenir au moins 2 caractères.";
                     } else {
-                      // Input data is valid, no error message returned
                       return null;
                     }
                   },
                 ),
                 const SizedBox(height: 25),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Prénom",
-                    prefixIcon: Icon(Icons.person),
-                    border: null,
-                    hintText: "Samuel",
-                  ),
+                buildFormInput(
+                  name: "Prénom",
+                  icon: Icons.person,
                   initialValue: widget.doctor.prenom,
+                  hint: "Samuel",
                   validator: (value) {
                     if (value != null && value.length < 2) {
                       return "Le prénom doit contenir au moins 2 caractères.";
@@ -144,14 +137,11 @@ class _EditBodyState extends State<EditBody> {
                   },
                 ),
                 const SizedBox(height: 25),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Adresse",
-                    prefixIcon: Icon(Icons.home),
-                    border: null,
-                    hintText: "41 rue de Valmy MONTREUIL 93100",
-                  ),
+                buildFormInput(
+                  name: "Adresse",
+                  icon: Icons.home,
                   initialValue: widget.doctor.adresse,
+                  hint: "41 rue de Valmy MONTREUIL 93100",
                   validator: (value) {
                     if (value != null && value.length < 10) {
                       return "L'adresse doit contenir au moins une dizaine de caractères.";
@@ -161,17 +151,14 @@ class _EditBodyState extends State<EditBody> {
                   },
                 ),
                 const SizedBox(height: 25),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Téléphone",
-                    prefixIcon: Icon(Icons.phone),
-                    border: null,
-                    hintText: "0637645529",
-                  ),
+                buildFormInput(
+                  name: "Téléphone",
+                  icon: Icons.phone,
                   initialValue: widget.doctor.tel,
+                  hint: "0637645529",
                   validator: (value) {
-                    if (value != null && value.length < 10) {
-                      return "L'adresse doit contenir au moins une dizaine de caractères.";
+                    if (value != null && value.length < 10 ) {
+                      return "Le numéro de téléphone doit contenir plus de 9 caractères.";
                     } else {
                       // Regex:
                       // | Phone number needs to start with a 0
@@ -182,14 +169,12 @@ class _EditBodyState extends State<EditBody> {
                   },
                 ),
                 const SizedBox(height: 25),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Spécialité",
-                    prefixIcon: Icon(Icons.medical_services),
-                    border: null,
-                    hintText: "Oncologie",
-                  ),
+                buildFormInput(
+                  name: "Spécialité",
+                  icon: Icons.medical_services,
                   initialValue: widget.doctor.spec,
+                  hint: "Oncologie",
+                  validator: (value) {}
                 ),
                 const SizedBox(height: 55),
                 ElevatedButton(
@@ -202,7 +187,7 @@ class _EditBodyState extends State<EditBody> {
                         print("valid");
                       }
                     },
-                    child: Text("Modifier")),
+                    child: const Text("Modifier")),
               ],
             ),
           ),
@@ -210,4 +195,20 @@ class _EditBodyState extends State<EditBody> {
       ),
     );
   }
+  Widget buildFormInput({
+    required String name,
+    required IconData icon,
+    String? initialValue,
+    String? hint,
+    required String? Function(dynamic value) validator,
+  }) => TextFormField(
+    decoration: InputDecoration(
+      labelText: name,
+      prefixIcon: Icon(icon),
+      border: null,
+      hintText: hint,
+    ),
+    initialValue: initialValue,
+    validator: validator,
+  );
 }
