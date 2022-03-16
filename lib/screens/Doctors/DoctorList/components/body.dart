@@ -43,26 +43,6 @@ class _BodyState extends State<Body> {
                 style: TextStyle(
                     fontFamily: 'Roboto', color: Colors.black, fontSize: 19),
               ),
-              // height: 38,
-              // child: TextField(
-              //   onChanged: (value) => onSearch(value),
-              //   decoration: InputDecoration(
-              //       filled: true,
-              //       fillColor: Colors.grey[250],
-              //       contentPadding: const EdgeInsets.all(0),
-              //       prefixIcon: Icon(
-              //         Icons.search,
-              //         color: Colors.grey.shade500,
-              //       ),
-              //       border: OutlineInputBorder(
-              //           borderRadius: BorderRadius.circular(50),
-              //           borderSide: BorderSide.none),
-              //       hintStyle: TextStyle(
-              //           fontSize: 16,
-              //           fontFamily: 'Roboto',
-              //           color: Colors.grey.shade500),
-              //       hintText: "Rechercher un médecin"),
-              // ),
             ),
           ),
           body: Padding(
