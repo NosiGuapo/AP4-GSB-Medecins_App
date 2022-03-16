@@ -1,18 +1,19 @@
-import 'package:ap4_gsbmedecins_appli/entities/Doctor.dart';
+import 'package:ap4_gsbmedecins_appli/entities/Country.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'Departement.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Departement {
   int id;
   String nom;
-  List<Doctor> medecins;
+  @JsonKey(required: false)
+  Country? pays;
 
   Departement({
     required this.id,
     required this.nom,
-    required this.medecins,
+    this.pays,
   });
 
   factory Departement.fromJson(Map<String, dynamic> json) => _$DepartementFromJson(json);
