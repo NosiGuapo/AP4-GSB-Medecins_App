@@ -15,7 +15,7 @@ Doctor _$DoctorFromJson(Map<String, dynamic> json) => Doctor(
       spec: json['spec'] as String?,
       departement: json['departement'] == null
           ? null
-          : Departement.fromJson(json['departement'] as Map<String, dynamic>),
+          : Departement.fromJson(json['departement']),
     );
 
 Map<String, dynamic> _$DoctorToJson(Doctor instance) => <String, dynamic>{

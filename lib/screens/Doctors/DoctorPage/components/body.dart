@@ -180,7 +180,6 @@ class _EditBodyState extends State<EditBody> {
                       return null;
                     }
                   },
-
                 ),
                 const SizedBox(height: 25),
                 buildFormInput(
@@ -193,6 +192,12 @@ class _EditBodyState extends State<EditBody> {
                   },
                   validator: (value) {},
                 ),
+                const SizedBox(height: 25),
+                // DropdownButton(
+                //   items: items,
+                //   onChanged: onChanged,
+                //   value: widget.doctor,
+                // ),
                 const SizedBox(height: 55),
                 buildSubmit()
               ],

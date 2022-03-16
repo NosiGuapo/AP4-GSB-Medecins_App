@@ -152,7 +152,7 @@ class _BodyState extends State<Body> {
   void onDismissed(Doctor doctor, String action, int index) {
     switch (action) {
       case "d":
-        final delete = DoctorService.deleteDoctor(doctor.id);
+        final delete = DoctorService.deleteDoctor(doctor.id!);
         delete.then((value) {
           final String snackMessage;
           if (value) {
