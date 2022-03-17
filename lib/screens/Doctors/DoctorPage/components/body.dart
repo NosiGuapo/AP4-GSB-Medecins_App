@@ -51,9 +51,10 @@ class DetailBody extends StatelessWidget {
               ),
               const SizedBox(height: 60),
               ListTile(
-                title: const Text("Adresse"),
-                subtitle: Text(doctor.adresse),
+                title: const Text("Localisation"),
+                subtitle: Text("${doctor.adresse}\n${doctor.departement!.nom}, ${doctor.departement!.pays!.nom}"),
                 leading: const Icon(Icons.home),
+                isThreeLine: true,
               ),
               ListTile(
                 title: const Text("Numéro de téléphone"),
