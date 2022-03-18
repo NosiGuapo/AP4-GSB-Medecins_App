@@ -87,18 +87,37 @@ class _BodyState extends State<Body> {
                       backgroundColor: failSnackbar,
                       icon: Icons.delete,
                       label: "Supprimer",
-                      onPressed: (BuildContext context) {
-                        onDismissed(doctor, "d", index);
-                      },
+                      onPressed: (delete) {
+                        final delete = DoctorService.deleteDoctor(doctor.id!);
+                        delete.then((value) {
+                          final String snackMessage;
+                          if (value) {
+                            snackMessage =
+                            "Le médecin ${doctor.prenom} ${doctor.nom} a été supprimé avec succès.";
+                            // Refreshing the list on delete
+                            listRefresh();
+                          } else {
+                            snackMessage =
+                            "Une erreur est survenue lors de la suppression du médecin.";
+                          }
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(buildSnackBar(value, snackMessage));
+                        });
+                      }
                       // flex: 1,
                     ),
                     SlidableAction(
                       backgroundColor: Colors.deepPurpleAccent.shade400,
                       icon: Icons.edit,
                       label: "Modifier",
-                      onPressed: (BuildContext context) {
-                        onDismissed(doctor, "e", index);
-                      },
+                      onPressed: (edit) {
+                        Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                DoctorProfile(doctorId: doctor.id!, isEdit: true),
+                          ),
+                        );
+                      }
                     ),
                   ],
                 ),
@@ -127,40 +146,6 @@ class _BodyState extends State<Body> {
 
   Future listRefresh() async {
     setState(() => doctors.clear());
-  }
-
-  void onDismissed(Doctor doctor, String action, int index) {
-    switch (action) {
-      case "d":
-        final delete = DoctorService.deleteDoctor(doctor.id!);
-        delete.then((value) {
-          final String snackMessage;
-          if (value) {
-            snackMessage =
-                "Le médecin ${doctor.prenom} ${doctor.nom} a été supprimé avec succès.";
-            // Refreshing the list on delete
-            // setState(() => doctors.removeAt(index));
-            setState(() => doctors.clear());
-          } else {
-            snackMessage =
-                "Une erreur est survenue lors de la suppression du médecin.";
-          }
-          ScaffoldMessenger.of(context)
-              .showSnackBar(buildSnackBar(value, snackMessage));
-        });
-        break;
-      case "e":
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) =>
-                DoctorProfile(doctorId: doctor.id!, isEdit: true),
-          ),
-        );
-        break;
-      default:
-        print("aaa");
-        break;
-    }
   }
 }
 
