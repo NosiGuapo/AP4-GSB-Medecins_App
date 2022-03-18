@@ -1,7 +1,7 @@
 import 'package:ap4_gsbmedecins_appli/components/snackbar.dart';
 import 'package:ap4_gsbmedecins_appli/entities/Doctor.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorList/components/background.dart';
-import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorPage/doctor_screen.dart';
+import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorPage/components/body.dart';
 import 'package:ap4_gsbmedecins_appli/services/DoctorService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -117,7 +117,7 @@ class _BodyState extends State<Body> {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          DoctorScreen(doctor: doctor),
+                          DoctorProfile(doctorId: doctor.id!),
                     ),
                   ),
                 ),
@@ -153,7 +153,7 @@ class _BodyState extends State<Body> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (BuildContext context) =>
-                DoctorScreen(doctor: doctor, editPage: true),
+                DoctorProfile(doctorId: doctor.id!, isEdit: true),
           ),
         );
         break;
