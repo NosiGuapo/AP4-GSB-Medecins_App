@@ -27,121 +27,140 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return Background(
       bg: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    showSearch(context: context, delegate: DoctorSearch());
-                  },
-                  icon: const Icon(Icons.search, color: Colors.grey)),
-            ],
-            title: const SizedBox(
-              child: Text(
-                "Liste de médecins",
-                style: TextStyle(
-                    fontFamily: 'Roboto', color: Colors.black, fontSize: 19),
-              ),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  showSearch(context: context, delegate: DoctorSearch());
+                },
+                icon: const Icon(Icons.search, color: Colors.grey)),
+          ],
+          title: const SizedBox(
+            child: Text(
+              "Liste de médecins",
+              style: TextStyle(
+                  fontFamily: 'Roboto', color: Colors.black, fontSize: 19),
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: FutureBuilder<List<Doctor>>(
-              future: DoctorService.getDoctors(null),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return const Center(
-                        child: CircularProgressIndicator(
-                            color: primaryColour, strokeWidth: 2));
-                  default:
-                    if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else {
-                      doctors = snapshot.data!;
-                      return buildDoctors(doctors);
-                    }
-                }
-              },
-            ),
-          )),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 18),
+          child: FutureBuilder<List<Doctor>>(
+            future: DoctorService.getDoctors(null),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return const Center(
+                      child: CircularProgressIndicator(
+                          color: primaryColour, strokeWidth: 2));
+                default:
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    doctors = snapshot.data!;
+                    return buildDoctors(doctors, doctors.length);
+                  }
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
 
-  Widget buildDoctors(List<Doctor> doctors) => RefreshIndicator(
-        onRefresh: listRefresh,
-        color: primaryColour,
-        strokeWidth: 2,
-        child: ListView.builder(
-            // physics: const BouncingScrollPhysics(),
-            itemCount: doctors.length,
-            itemBuilder: (context, index) {
-              final doctor = doctors[index];
-              return Slidable(
-                // Actions on the right part of each slide
-                endActionPane: ActionPane(
-                  motion: const ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                      backgroundColor: failSnackbar,
-                      icon: Icons.delete,
-                      label: "Supprimer",
-                      onPressed: (delete) {
-                        final delete = DoctorService.deleteDoctor(doctor.id!);
-                        delete.then((value) {
-                          final String snackMessage;
-                          if (value) {
-                            snackMessage =
-                            "Le médecin ${doctor.prenom} ${doctor.nom} a été supprimé avec succès.";
-                            // Refreshing the list on delete
-                            listRefresh();
-                          } else {
-                            snackMessage =
-                            "Une erreur est survenue lors de la suppression du médecin.";
-                          }
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(buildSnackBar(value, snackMessage));
-                        });
-                      }
-                      // flex: 1,
+  Widget buildDoctors(List<Doctor> doctors, int results) => Stack(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 16),
+              child: Text("${results} Résultats.")
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 38),
+            child: RefreshIndicator(
+              onRefresh: listRefresh,
+              color: primaryColour,
+              strokeWidth: 2,
+              child: ListView.builder(
+                // physics: const BouncingScrollPhysics(),
+                itemCount: doctors.length,
+                itemBuilder: (context, index) {
+                  final doctor = doctors[index];
+                  return Slidable(
+                    // Actions on the right part of each slide
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                            backgroundColor: failSnackbar,
+                            icon: Icons.delete,
+                            label: "Supprimer",
+                            onPressed: (delete) {
+                              final delete =
+                                  DoctorService.deleteDoctor(doctor.id!);
+                              delete.then((value) {
+                                final String snackMessage;
+                                if (value) {
+                                  snackMessage =
+                                      "Le médecin ${doctor.prenom} ${doctor.nom} a été supprimé avec succès.";
+                                  // Refreshing the list on delete
+                                  if (mounted) {
+                                    listRefresh();
+                                  } else {
+                                    // Actions
+
+                                  }
+                                } else {
+                                  snackMessage =
+                                      "Une erreur est survenue lors de la suppression du médecin.";
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    buildSnackBar(value, snackMessage));
+                              });
+                            }
+                            // flex: 1,
+                            ),
+                        SlidableAction(
+                            backgroundColor: Colors.deepPurpleAccent.shade400,
+                            icon: Icons.edit,
+                            label: "Modifier",
+                            onPressed: (edit) {
+                              Navigator.of(context, rootNavigator: true).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      DoctorProfile(
+                                          doctorId: doctor.id!, isEdit: true),
+                                ),
+                              );
+                            }),
+                      ],
                     ),
-                    SlidableAction(
-                      backgroundColor: Colors.deepPurpleAccent.shade400,
-                      icon: Icons.edit,
-                      label: "Modifier",
-                      onPressed: (edit) {
-                        Navigator.of(context, rootNavigator: true).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                DoctorProfile(doctorId: doctor.id!, isEdit: true),
-                          ),
-                        );
-                      }
+                    child: ListTile(
+                      title: Text(doctor.prenom + " " + doctor.nom),
+                      subtitle: Text(doctor.adresse),
+                      leading: CircleAvatar(
+                        child: ClipOval(
+                            child: ColorFiltered(
+                          colorFilter: const ColorFilter.mode(
+                              Colors.white54, BlendMode.lighten),
+                          child: Image.asset("assets/images/profile.png"),
+                        )),
+                        backgroundColor: primaryColour,
+                      ),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              DoctorProfile(doctorId: doctor.id!),
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-                child: ListTile(
-                  title: Text(doctor.prenom + " " + doctor.nom),
-                  subtitle: Text(doctor.adresse),
-                  leading: CircleAvatar(
-                    child: ClipOval(
-                        child: ColorFiltered(
-                      colorFilter: const ColorFilter.mode(
-                          Colors.white54, BlendMode.lighten),
-                      child: Image.asset("assets/images/profile.png"),
-                    )),
-                    backgroundColor: primaryColour,
-                  ),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          DoctorProfile(doctorId: doctor.id!),
-                    ),
-                  ),
-                ),
-              );
-            }),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       );
 
   Future listRefresh() async {
@@ -178,8 +197,11 @@ class DoctorSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
+    // If the query is empty, we return all the doctors
+    final String? search;
+    query.isEmpty ? search = null : search = query;
     return FutureBuilder<List<Doctor>>(
-      future: DoctorService.getDoctors(query),
+      future: DoctorService.getDoctors(search),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
@@ -189,8 +211,14 @@ class DoctorSearch extends SearchDelegate<String> {
           default:
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.data!.isEmpty) {
+              return noSuggestionBuild();
             } else {
-              return listApp.buildDoctors(snapshot.data!.toList());
+              var doctors = snapshot.data!.toList();
+              return Padding(
+                padding: const EdgeInsets.only(top: 18),
+                child: listApp.buildDoctors(doctors, doctors.length),
+              );
             }
         }
       },
@@ -207,7 +235,15 @@ class DoctorSearch extends SearchDelegate<String> {
   Widget noSuggestionBuild() {
     return const Center(
         child: Text(
-      'Aucun résultat',
+      'Aucun résultat.',
+      style: TextStyle(fontFamily: 'Roboto', fontSize: 17),
+    ));
+  }
+
+  Widget noQueryBuild() {
+    return const Center(
+        child: Text(
+      'Veuillez entrer le nom d\'un médecin.',
       style: TextStyle(fontFamily: 'Roboto', fontSize: 17),
     ));
   }
