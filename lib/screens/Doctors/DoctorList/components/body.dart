@@ -74,7 +74,7 @@ class _BodyState extends State<Body> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(left: 16),
-              child: Text("${results} Résultats.")
+              child: Text("$results Résultats.")
           ),
           Padding(
             padding: const EdgeInsets.only(top: 38),

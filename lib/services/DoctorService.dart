@@ -8,11 +8,9 @@ class DoctorService{
     if (value == null){
       // If null : We get all the doctors
       url = Uri.parse('http://10.0.2.2:8080/gsb/medecins');
-      // url = Uri.parse('http://172.31.1.95:8080/gsb/medecins');
     } else {
       // If not null : a search is currently happening, we display the doctors by their name
-      url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/lname/'+value.toString());
-      // url = Uri.parse('http://172.31.1.95:8080/gsb/medecins/lname/'+value.toString());
+      url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/name/'+value.toString());
     }
 
     final response = await http.get(url);

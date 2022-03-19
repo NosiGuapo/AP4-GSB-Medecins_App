@@ -1,6 +1,7 @@
-import 'package:ap4_gsbmedecins_appli/screens/Profile/ShowProfile/profile_screen.dart';
-import 'package:ap4_gsbmedecins_appli/screens/Settings/settings_screen.dart';
-import 'package:ap4_gsbmedecins_appli/screens/SignIn/signin_screen.dart';
+// import 'package:ap4_gsbmedecins_appli/screens/Profile/ShowProfile/profile_screen.dart';
+// import 'package:ap4_gsbmedecins_appli/screens/Settings/settings_screen.dart';
+// import 'package:ap4_gsbmedecins_appli/screens/SignIn/signin_screen.dart';
+import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/countries_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Welcome/components/body.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorList/doctors_screen.dart';
 import 'package:flutter/material.dart';
@@ -41,9 +42,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           // The current setup is momentary and will be improved when the complete auth system is up
           Body(),
           DoctorsScreen(),
-          ProfileScreen(),
-          SettingsScreen(),
-          SignInScreen()
+          CountriesScreen(),
+          // ProfileScreen(),
+          // SettingsScreen(),
+          // SignInScreen()
         ],
       ),
       // Bottom navigation bar
@@ -61,17 +63,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             label: "Médecins",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_sharp),
-            label: "Profile",
+            icon: Icon(Icons.map),
+            label: "Pays",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: "Paramètres",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_rounded),
-            label: "Sign in",
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.account_circle_sharp),
+          //   label: "Profile",
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.settings),
+          //   label: "Paramètres",
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.account_balance_rounded),
+          //   label: "Sign in",
+          // ),
         ],
         // Icons colour while active
         fixedColor: primaryColour,
