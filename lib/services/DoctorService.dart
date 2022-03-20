@@ -10,7 +10,7 @@ class DoctorService{
       url = Uri.parse('http://10.0.2.2:8080/gsb/medecins');
     } else {
       // If not null : a search is currently happening, we display the doctors by their name
-      url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/name/'+value.toString());
+      url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/name?name='+value.toString());
     }
 
     final response = await http.get(url);
@@ -40,24 +40,16 @@ class DoctorService{
     }
   }
 
-  static Future<List<Doctor>> getDoctorsBySector(String? query) async{
-    final Uri url;
-    if (query == null){
-      url = Uri.parse('http://10.0.2.2:8080/gsb/medecins');
-    } else {
-      url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/spec/'+query.toString());
-    }
+  static Future<Set<String>> getSpecs() async{
+    final url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/specs');;
 
     final response = await http.get(url);
     if (response.statusCode == 200){
-      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
-      var doctors = body.map((body) {
-        return Doctor.fromJson(body);
-      }).toList();
-      return doctors;
+      Set<String> body = Set<String>.from(json.decode(utf8.decode(response.bodyBytes)));
+      return body;
     } else {
-      print('Une erreur est survenue lors de l\'accès aux données (getDoctorsBySector): Erreur '+response.statusCode.toString());
-      return List<Doctor>.empty();
+      print('Une erreur est survenue lors de l\'accès aux données (getSpecs): Erreur '+response.statusCode.toString());
+      return <String>{};
     }
   }
 

@@ -49,7 +49,7 @@ class _BodyState extends State<Body> {
                     showSearch(context: context, delegate: DoctorSearch());
                     break;
                   case _MenuValues.sectorOfActivity:
-                    showSearch(context: context, delegate: SectorSearch());
+                    null;
                     break;
                 }
               },
@@ -263,86 +263,5 @@ class DoctorSearch extends SearchDelegate<String> {
       'Veuillez entrer le nom d\'un médecin.',
       style: TextStyle(fontFamily: 'Roboto', fontSize: 17),
     ));
-  }
-}
-
-class SectorSearch extends SearchDelegate<String> {
-  final listApp = _BodyState();
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    // Cross icon - Clears field query
-    return [
-      IconButton(
-          onPressed: () {
-            query = "";
-          },
-          icon: const Icon(Icons.clear))
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    // Arrow icon - Go back to the previous page (doctor list)
-    return IconButton(
-      onPressed: () {
-        close(context, '');
-      },
-      icon: AnimatedIcon(
-          icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // If the query is empty, we return all the doctors
-    final String? search;
-    query.isEmpty ? search = null : search = query;
-    return FutureBuilder<List<Doctor>>(
-      future: DoctorService.getDoctorsBySector(search),
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Center(
-                child: CircularProgressIndicator(
-                    color: primaryColour, strokeWidth: 2));
-          default:
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.data!.isEmpty) {
-              return noSuggestionBuild();
-            } else {
-              var doctors = snapshot.data!.toList();
-              return Padding(
-                padding: const EdgeInsets.only(top: 18),
-                child: listApp.buildDoctors(doctors, doctors.length),
-              );
-            }
-        }
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // We want the same display, we can directly use the result FutureBuilder instead of making an useless one
-    return buildResults(context);
-  }
-
-  // No result matching - We alert the user with a small message
-  Widget noSuggestionBuild() {
-    return const Center(
-        child: Text(
-          'Aucun résultat.',
-          style: TextStyle(fontFamily: 'Roboto', fontSize: 17),
-        ));
-  }
-
-  Widget noQueryBuild() {
-    return const Center(
-        child: Text(
-          'Veuillez entrer le nom d\'une spécialité.',
-          style: TextStyle(fontFamily: 'Roboto', fontSize: 17),
-        ));
   }
 }
