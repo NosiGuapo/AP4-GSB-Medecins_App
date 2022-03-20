@@ -8,10 +8,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../../../constants.dart';
 
-enum _MenuValues {
-  sectorOfActivity,
-  completeName
-}
+enum _MenuValues { sectorOfActivity, completeName }
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -49,7 +46,14 @@ class _BodyState extends State<Body> {
                     showSearch(context: context, delegate: DoctorSearch());
                     break;
                   case _MenuValues.sectorOfActivity:
-                    null;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return SectorSearch();
+                        },
+                      ),
+                    );
                     break;
                 }
               },
@@ -264,4 +268,104 @@ class DoctorSearch extends SearchDelegate<String> {
       style: TextStyle(fontFamily: 'Roboto', fontSize: 17),
     ));
   }
+}
+
+class SectorSearch extends StatefulWidget {
+  const SectorSearch({Key? key}) : super(key: key);
+
+  @override
+  State<SectorSearch> createState() => _SectorSearchState();
+}
+
+class _SectorSearchState extends State<SectorSearch> {
+  late Set<String> specs;
+  late String? fieldValue = specs.first;
+  late List<Doctor> doctors;
+  final listApp = _BodyState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Background(
+      bg: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          iconTheme: const IconThemeData(color: Colors.black87),
+          title: const SizedBox(
+            child: Text(
+              "Recherche par spécialité",
+              style: TextStyle(
+                  fontFamily: 'Roboto', color: Colors.black, fontSize: 19),
+            ),
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 18),
+          child: Stack(
+            children: [
+              FutureBuilder<Set<String>>(
+                future: DoctorService.getSpecs(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const Center(
+                          child: CircularProgressIndicator(
+                              color: primaryColour, strokeWidth: 2));
+                    default:
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else {
+                        specs = snapshot.data!;
+                        return Stack(
+                          children: [
+                            Container(
+                              alignment: Alignment.topCenter,
+                              child: DropdownButton<String>(
+                                value: fieldValue,
+                                items: specs.map(buildMenuItem).toList(),
+                                onChanged: (value) => setState(
+                                  () => fieldValue = value,
+                                ),
+                              ),
+                            ),
+                            FutureBuilder<List<Doctor>>(
+                              future:
+                                  DoctorService.getDoctorsBySpec(fieldValue!),
+                              builder: (context, snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                    return const Center(
+                                        child: CircularProgressIndicator(
+                                            color: primaryColour,
+                                            strokeWidth: 2));
+                                  default:
+                                    if (!snapshot.hasData) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    } else {
+                                      doctors = snapshot.data!;
+                                      return Padding(
+                                        padding: const EdgeInsets.only(top: 75),
+                                        child: listApp.buildDoctors(
+                                            doctors, doctors.length),
+                                      );
+                                    }
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      }
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  DropdownMenuItem<String> buildMenuItem(String item) =>
+      DropdownMenuItem(value: item, child: Text(item));
 }
