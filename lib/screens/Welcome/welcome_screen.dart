@@ -63,8 +63,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             label: "Médecins",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: "Pays",
+            icon: Icon(Icons.room),
+            label: "Pays/Départements",
           ),
           // BottomNavigationBarItem(
           //   icon: Icon(Icons.account_circle_sharp),

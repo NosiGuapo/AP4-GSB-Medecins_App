@@ -82,7 +82,7 @@ class _BodyState extends State<Body> {
                     return const Center(child: CircularProgressIndicator());
                   } else {
                     doctors = snapshot.data!;
-                    return buildDoctors(doctors, doctors.length);
+                    return buildDoctors(doctors);
                   }
               }
             },
@@ -92,11 +92,11 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget buildDoctors(List<Doctor> doctors, int results) => Stack(
+  Widget buildDoctors(List<Doctor> doctors) => Stack(
         children: <Widget>[
           Padding(
               padding: const EdgeInsets.only(left: 16),
-              child: Text("$results Résultats.")),
+              child: Text("${doctors.length} Résultats.")),
           Padding(
             padding: const EdgeInsets.only(top: 38),
             child: RefreshIndicator(
@@ -238,7 +238,7 @@ class DoctorSearch extends SearchDelegate<String> {
               var doctors = snapshot.data!.toList();
               return Padding(
                 padding: const EdgeInsets.only(top: 18),
-                child: listApp.buildDoctors(doctors, doctors.length),
+                child: listApp.buildDoctors(doctors),
               );
             }
         }
@@ -347,7 +347,7 @@ class _SectorSearchState extends State<SectorSearch> {
                                       return Padding(
                                         padding: const EdgeInsets.only(top: 75),
                                         child: listApp.buildDoctors(
-                                            doctors, doctors.length),
+                                            doctors),
                                       );
                                     }
                                 }
