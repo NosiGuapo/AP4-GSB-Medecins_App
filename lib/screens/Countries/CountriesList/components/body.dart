@@ -257,8 +257,8 @@ class _CountrySearchState extends State<CountrySearch> {
                               ),
                             ),
                             FutureBuilder<List<Doctor>>(
-                              future:
-                                  DoctorService.getDoctorsOfCountry(fieldValue!),
+                              future: DoctorService.getDoctorsOfCountry(
+                                  fieldValue!),
                               builder: (context, snapshot) {
                                 switch (snapshot.connectionState) {
                                   case ConnectionState.waiting:
@@ -398,9 +398,11 @@ class RegionSearch extends StatefulWidget {
 }
 
 class _RegionSearchState extends State<RegionSearch> {
+  late List<Country> countries;
   late List<Departement> regions;
   late List<Doctor> doctors;
-  late int? fieldValue = regions.first.id;
+  late int? cFieldValue = countries.first.id;
+  late int? rFieldValue = regions.first.id;
 
   @override
   Widget build(BuildContext context) {
@@ -422,8 +424,8 @@ class _RegionSearchState extends State<RegionSearch> {
           padding: const EdgeInsets.only(top: 18),
           child: Stack(
             children: [
-              FutureBuilder<List<Departement>>(
-                future: RegionService.getRegions(),
+              FutureBuilder<List<Country>>(
+                future: CountryService.getCountries(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
@@ -434,27 +436,27 @@ class _RegionSearchState extends State<RegionSearch> {
                       if (!snapshot.hasData) {
                         return const Center(child: CircularProgressIndicator());
                       } else {
-                        regions = snapshot.data!;
+                        countries = snapshot.data!;
                         return Stack(
                           children: [
                             Container(
                               alignment: Alignment.topCenter,
                               child: DropdownButton<int>(
-                                value: fieldValue,
+                                value: cFieldValue,
                                 items: [
-                                  for (Departement region in regions)
+                                  for (Country country in countries)
                                     DropdownMenuItem(
-                                        value: region.id,
-                                        child: Text(region.nom)),
+                                        value: country.id,
+                                        child: Text(country.nom)),
                                 ],
-                                onChanged: (value) => setState(
-                                  () => fieldValue = value,
-                                ),
+                                onChanged: (value) => setState(() {
+                                  cFieldValue = value;
+                                  rFieldValue = regions.first.id;
+                                }),
                               ),
                             ),
-                            FutureBuilder<List<Doctor>>(
-                              future:
-                                  DoctorService.getDoctorsOfRegion(fieldValue!),
+                            FutureBuilder<List<Departement>>(
+                              future: RegionService.getRegionsOfCountry(cFieldValue!),
                               builder: (context, snapshot) {
                                 switch (snapshot.connectionState) {
                                   case ConnectionState.waiting:
@@ -467,10 +469,61 @@ class _RegionSearchState extends State<RegionSearch> {
                                       return const Center(
                                           child: CircularProgressIndicator());
                                     } else {
-                                      doctors = snapshot.data!;
+                                      regions = snapshot.data!;
                                       return Padding(
-                                        padding: const EdgeInsets.only(top: 75),
-                                        child: buildDoctors(doctors),
+                                        padding: const EdgeInsets.only(top: 55),
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                              alignment: Alignment.topCenter,
+                                              child: DropdownButton<int>(
+                                                value: rFieldValue,
+                                                items: [
+                                                  for (Departement region
+                                                      in regions)
+                                                    DropdownMenuItem(
+                                                        value: region.id,
+                                                        child: Text(region.nom)),
+                                                ],
+                                                onChanged: (value) => setState(
+                                                  () => rFieldValue = value,
+                                                ),
+                                              ),
+                                            ),
+                                            FutureBuilder<List<Doctor>>(
+                                              future: DoctorService
+                                                  .getDoctorsOfRegion(
+                                                      rFieldValue!),
+                                              builder: (context, snapshot) {
+                                                switch (
+                                                    snapshot.connectionState) {
+                                                  case ConnectionState.waiting:
+                                                    return const Center(
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                                color:
+                                                                    primaryColour,
+                                                                strokeWidth: 2));
+                                                  default:
+                                                    if (!snapshot.hasData) {
+                                                      return const Center(
+                                                          child:
+                                                              CircularProgressIndicator());
+                                                    } else {
+                                                      doctors = snapshot.data!;
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                                top: 75),
+                                                        child:
+                                                            buildDoctors(doctors),
+                                                      );
+                                                    }
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
                                       );
                                     }
                                 }
