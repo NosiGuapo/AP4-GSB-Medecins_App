@@ -4,11 +4,11 @@ part 'Country.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Country {
-  int id;
+  int? id;
   String nom;
 
   Country({
-    required this.id,
+    this.id,
     required this.nom,
   });
 

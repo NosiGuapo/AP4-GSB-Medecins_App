@@ -7,7 +7,7 @@ part of 'Country.dart';
 // **************************************************************************
 
 Country _$CountryFromJson(Map<String, dynamic> json) => Country(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       nom: json['nom'] as String,
     );
 

@@ -4,14 +4,14 @@ part 'Invitation.g.dart';
 
 @JsonSerializable()
 class Invitation {
-  int id;
+  int? id;
   String key;
   int maxuses, currentuses;
   DateTime creation;
   int owner;
 
   Invitation({
-    required this.id,
+    this.id,
     required this.key,
     required this.maxuses,
     required this.currentuses,

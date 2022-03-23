@@ -128,7 +128,7 @@ class _BodyState extends State<Body> {
                                 label: "Supprimer",
                                 onPressed: (delete) {
                                   final delete =
-                                      CountryService.deleteCountry(country.id);
+                                      CountryService.deleteCountry(country.id!);
                                   delete.then((value) {
                                     final String snackMessage;
                                     if (value) {

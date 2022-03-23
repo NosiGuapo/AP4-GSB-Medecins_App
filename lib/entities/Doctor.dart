@@ -13,7 +13,7 @@ class Doctor {
   Departement? departement;
 
   Doctor({
-    required this.id,
+    this.id,
     required this.nom,
     required this.prenom,
     required this.adresse,

@@ -7,13 +7,13 @@ part 'User.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class User {
-  int id;
+  int? id;
   String lname, fname, username, mail, passwd;
   DateTime? register;
   List<Invitation>? invitation;
 
   User({
-    required this.id,
+    this.id,
     required this.lname,
     required this.fname,
     required this.username,

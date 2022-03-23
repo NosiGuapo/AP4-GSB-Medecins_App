@@ -7,7 +7,7 @@ part of 'Invitation.dart';
 // **************************************************************************
 
 Invitation _$InvitationFromJson(Map<String, dynamic> json) => Invitation(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       key: json['key'] as String,
       maxuses: json['maxuses'] as int,
       currentuses: json['currentuses'] as int,

@@ -7,7 +7,7 @@ part of 'Departement.dart';
 // **************************************************************************
 
 Departement _$DepartementFromJson(Map<String, dynamic> json) => Departement(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       nom: json['nom'] as String,
       pays: json['pays'] == null
           ? null

@@ -5,13 +5,13 @@ part 'Departement.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Departement {
-  int id;
+  int? id;
   String nom;
   @JsonKey(required: false)
   Country? pays;
 
   Departement({
-    required this.id,
+    this.id,
     required this.nom,
     this.pays,
   });
