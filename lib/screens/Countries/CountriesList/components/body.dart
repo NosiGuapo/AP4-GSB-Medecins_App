@@ -1,6 +1,7 @@
 import 'package:ap4_gsbmedecins_appli/entities/Country.dart';
 import 'package:ap4_gsbmedecins_appli/entities/Departement.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/background.dart';
+import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/regionAddForm.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorPage/components/body.dart';
 import 'package:ap4_gsbmedecins_appli/services/CountryService.dart';
 import 'package:ap4_gsbmedecins_appli/services/DoctorService.dart';
@@ -11,8 +12,10 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../../../constants.dart';
 import '../../../../entities/Doctor.dart';
+import 'countryAddForm.dart';
 
 enum _MenuValues { country, region }
+enum _AddValues { addCountry, addRegion }
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -32,6 +35,43 @@ class _BodyState extends State<Body> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           actions: [
+            PopupMenuButton<_AddValues>(
+              icon: const Icon(Icons.add, color: Colors.grey),
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  child: Text("Ajouter un pays"),
+                  value: _AddValues.addCountry,
+                ),
+                const PopupMenuItem(
+                  child: Text("Ajouter un département"),
+                  value: _AddValues.addRegion,
+                ),
+              ],
+              onSelected: (value) {
+                switch (value) {
+                  case _AddValues.addRegion:
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const AddRegion();
+                        },
+                      ),
+                    );
+                    break;
+                  case _AddValues.addCountry:
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const AddCountry();
+                        },
+                      ),
+                    );
+                    break;
+                }
+              },
+            ),
             PopupMenuButton<_MenuValues>(
               icon: const Icon(Icons.search, color: Colors.grey),
               itemBuilder: (context) => [
@@ -134,8 +174,7 @@ class _BodyState extends State<Body> {
                                 icon: Icons.delete,
                                 label: "Supprimer",
                                 onPressed: (delete) {
-                                  final delete =
-                                      CountryService.deleteCountry(country.id!);
+                                  final delete = CountryService.deleteCountry(country.id!);
                                   delete.then((value) {
                                     final String snackMessage;
                                     if (value) {
