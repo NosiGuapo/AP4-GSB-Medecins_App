@@ -154,74 +154,67 @@ class _BodyState extends State<Body> {
               onRefresh: listRefresh,
               color: primaryColour,
               strokeWidth: 2,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 38),
-                child: RefreshIndicator(
-                  onRefresh: listRefresh,
-                  color: primaryColour,
-                  strokeWidth: 2,
-                  child: ListView.builder(
-                    itemCount: countries.length,
-                    itemBuilder: (context, index) {
-                      final country = countries[index];
-                      return Slidable(
-                        // Actions on the right part of each slide
-                        endActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                                backgroundColor: failSnackbar,
-                                icon: Icons.delete,
-                                label: "Supprimer",
-                                onPressed: (delete) {
-                                  final delete = CountryService.deleteCountry(country.id!);
-                                  delete.then((value) {
-                                    final String snackMessage;
-                                    if (value) {
-                                      snackMessage =
-                                          "Le pays suivant a été supprimé avec succès: ${country.nom}.";
-                                      listRefresh();
-                                    } else {
-                                      snackMessage =
-                                          "Une erreur est survenue lors de la suppression du pays.";
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        buildSnackBar(value, snackMessage));
-                                  });
+              child: ListView.builder(
+                itemCount: countries.length,
+                itemBuilder: (context, index) {
+                  final country = countries[index];
+                  return Slidable(
+                    // Actions on the right part of each slide
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                            backgroundColor: failSnackbar,
+                            icon: Icons.delete,
+                            label: "Supprimer",
+                            onPressed: (delete) {
+                              final delete =
+                                  CountryService.deleteCountry(country.id!);
+                              delete.then((value) {
+                                final String snackMessage;
+                                if (value) {
+                                  snackMessage =
+                                      "Le pays suivant a été supprimé avec succès: ${country.nom}.";
+                                  listRefresh();
+                                } else {
+                                  snackMessage =
+                                      "Une erreur est survenue lors de la suppression du pays.";
                                 }
-                                // flex: 1,
-                                ),
-                            SlidableAction(
-                              backgroundColor: Colors.deepPurpleAccent.shade400,
-                              icon: Icons.edit,
-                              label: "Modifier",
-                              onPressed: null,
-                              // onPressed: (edit) {
-                              //   Navigator.of(context, rootNavigator: true).push(
-                              //     MaterialPageRoute(
-                              //       builder: (BuildContext context) =>
-                              //           DoctorProfile(
-                              //               doctorId: doctor.id!, isEdit: true),
-                              //     ),
-                              //   );
-                              // },
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    buildSnackBar(value, snackMessage));
+                              });
+                            }
+                            // flex: 1,
                             ),
-                          ],
+                        SlidableAction(
+                          backgroundColor: Colors.deepPurpleAccent.shade400,
+                          icon: Icons.edit,
+                          label: "Modifier",
+                          onPressed: null,
+                          // onPressed: (edit) {
+                          //   Navigator.of(context, rootNavigator: true).push(
+                          //     MaterialPageRoute(
+                          //       builder: (BuildContext context) =>
+                          //           DoctorProfile(
+                          //               doctorId: doctor.id!, isEdit: true),
+                          //     ),
+                          //   );
+                          // },
                         ),
-                        child: ListTile(
-                          title: Text(country.nom),
-                          onTap: null,
-                          // onTap: () => Navigator.of(context).push(
-                          //   MaterialPageRoute(
-                          //     builder: (BuildContext context) =>
-                          //         DoctorProfile(doctorId: doctor.id!),
-                          //   ),
-                          // ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                      ],
+                    ),
+                    child: ListTile(
+                      title: Text(country.nom),
+                      onTap: null,
+                      // onTap: () => Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (BuildContext context) =>
+                      //         DoctorProfile(doctorId: doctor.id!),
+                      //   ),
+                      // ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -368,9 +361,6 @@ class _CountrySearchState extends State<CountrySearch> {
                                   // Refreshing the list on delete
                                   if (mounted) {
                                     listRefresh();
-                                  } else {
-                                    // Actions
-
                                   }
                                 } else {
                                   snackMessage =
@@ -490,7 +480,6 @@ class _RegionSearchState extends State<RegionSearch> {
                                 ],
                                 onChanged: (value) => setState(() {
                                   cFieldValue = value;
-                                  rFieldValue = regions.first.id;
                                 }),
                               ),
                             ),
@@ -509,61 +498,87 @@ class _RegionSearchState extends State<RegionSearch> {
                                           child: CircularProgressIndicator());
                                     } else {
                                       regions = snapshot.data!;
-                                      return Padding(
-                                        padding: const EdgeInsets.only(top: 55),
-                                        child: Stack(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.topCenter,
-                                              child: DropdownButton<int>(
-                                                value: rFieldValue,
-                                                items: [
-                                                  for (Departement region
-                                                      in regions)
-                                                    DropdownMenuItem(
-                                                        value: region.id,
-                                                        child: Text(region.nom)),
-                                                ],
-                                                onChanged: (value) => setState(
-                                                  () => rFieldValue = value,
+                                      if (regions.isEmpty) {
+                                        // This country has no region, we do a search by country
+                                        return Padding(
+                                          padding: const EdgeInsets.only(top: 55),
+                                          child: FutureBuilder<List<Doctor>>(
+                                            future: DoctorService.getDoctorsOfCountry(cFieldValue!),
+                                            builder: (context, snapshot) {
+                                              switch (
+                                                  snapshot.connectionState) {
+                                                case ConnectionState.waiting:
+                                                  return const Center(
+                                                    child: CircularProgressIndicator(color: primaryColour, strokeWidth: 2
+                                                    ),
+                                                  );
+                                                default:
+                                                  if (!snapshot.hasData) {
+                                                    return const Center(
+                                                        child: CircularProgressIndicator());
+                                                  } else {
+                                                    doctors = snapshot.data!;
+                                                    return Padding(
+                                                      padding: const EdgeInsets.only(top: 75),
+                                                      child: buildDoctors(doctors),
+                                                    );
+                                                  }
+                                              }
+                                            },
+                                          ),
+                                        );
+                                      } else {
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 55),
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.topCenter,
+                                                child: DropdownButton<int>(
+                                                  value: rFieldValue,
+                                                  items: [
+                                                    for (Departement region
+                                                        in regions)
+                                                      DropdownMenuItem(
+                                                          value: region.id,
+                                                          child:
+                                                              Text(region.nom)),
+                                                  ],
+                                                  onChanged: (value) =>
+                                                      setState(
+                                                    () => rFieldValue = value,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            FutureBuilder<List<Doctor>>(
-                                              future: DoctorService
-                                                  .getDoctorsOfRegion(
-                                                      rFieldValue!),
-                                              builder: (context, snapshot) {
-                                                switch (
-                                                    snapshot.connectionState) {
-                                                  case ConnectionState.waiting:
-                                                    return const Center(
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                                color:
-                                                                    primaryColour,
-                                                                strokeWidth: 2));
-                                                  default:
-                                                    if (!snapshot.hasData) {
+                                              FutureBuilder<List<Doctor>>(
+                                                future: DoctorService.getDoctorsOfRegion(rFieldValue!),
+                                                builder: (context, snapshot) {
+                                                  switch (snapshot.connectionState) {
+                                                    case ConnectionState.waiting:
                                                       return const Center(
-                                                          child:
-                                                              CircularProgressIndicator());
-                                                    } else {
-                                                      doctors = snapshot.data!;
-                                                      return Padding(
-                                                        padding:
-                                                            const EdgeInsets.only(
-                                                                top: 75),
                                                         child:
-                                                            buildDoctors(doctors),
+                                                            CircularProgressIndicator(color: primaryColour, strokeWidth: 2),
                                                       );
-                                                    }
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      );
+                                                    default:
+                                                      if (!snapshot.hasData) {
+                                                        return const Center(
+                                                            child: CircularProgressIndicator());
+                                                      } else {
+                                                        doctors = snapshot.data!;
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets.only(top: 75),
+                                                          child: buildDoctors(doctors),
+                                                        );
+                                                      }
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
                                     }
                                 }
                               },
