@@ -1,6 +1,7 @@
 import 'package:ap4_gsbmedecins_appli/components/snackbar.dart';
 import 'package:ap4_gsbmedecins_appli/entities/Doctor.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorList/components/background.dart';
+import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorList/components/doctorAddForm.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorPage/components/body.dart';
 import 'package:ap4_gsbmedecins_appli/services/DoctorService.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,15 @@ class _BodyState extends State<Body> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           actions: [
+            IconButton(
+                onPressed: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const AddDoctor();
+                    })),
+                icon: const Icon(
+                  Icons.add,
+                  color: Colors.black45,
+                )),
             PopupMenuButton<_MenuValues>(
               icon: const Icon(Icons.search, color: Colors.grey),
               itemBuilder: (context) => [
@@ -46,14 +56,10 @@ class _BodyState extends State<Body> {
                     showSearch(context: context, delegate: DoctorSearch());
                     break;
                   case _MenuValues.sectorOfActivity:
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return SectorSearch();
-                        },
-                      ),
-                    );
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const SectorSearch();
+                    }));
                     break;
                 }
               },
@@ -346,8 +352,7 @@ class _SectorSearchState extends State<SectorSearch> {
                                       doctors = snapshot.data!;
                                       return Padding(
                                         padding: const EdgeInsets.only(top: 75),
-                                        child: listApp.buildDoctors(
-                                            doctors),
+                                        child: listApp.buildDoctors(doctors),
                                       );
                                     }
                                 }
