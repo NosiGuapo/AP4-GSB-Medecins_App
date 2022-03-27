@@ -130,7 +130,7 @@ class _BodyState extends State<Body> {
                     return const Center(child: CircularProgressIndicator());
                   } else {
                     countries = snapshot.data!;
-                    return buildCountries(countries, countries.length);
+                    return buildCountries(countries);
                   }
               }
             },
@@ -140,13 +140,13 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget buildCountries(List<Country> countries, int results) => Stack(
+  Widget buildCountries(List<Country> countries) => Stack(
         children: <Widget>[
           Padding(
               padding: const EdgeInsets.only(left: 16),
-              child: Text("$results Résultats.")),
+              child: Text("${countries.length} Résultats.")),
           Padding(
-            padding: const EdgeInsets.only(top: 22),
+            padding: const EdgeInsets.only(top: 62),
             child: RefreshIndicator(
               onRefresh: listRefresh,
               color: primaryColour,
@@ -203,12 +203,6 @@ class _BodyState extends State<Body> {
                     child: ListTile(
                       title: Text(country.nom),
                       onTap: null,
-                      // onTap: () => Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (BuildContext context) =>
-                      //         DoctorProfile(doctorId: doctor.id!),
-                      //   ),
-                      // ),
                     ),
                   );
                 },

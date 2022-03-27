@@ -81,13 +81,13 @@ class _AddCountryState extends State<AddCountry> {
               final String snackMessage;
               if (value) {
                 snackMessage = "Le pays suivant a été ajouté avec succès: ${country.nom}.";
+                // Going back to the country page
+                Navigator.of(context).pop();
               } else {
                 snackMessage = "Une erreur est survenue lors de l'ajout du pays.";
               }
               ScaffoldMessenger.of(context).showSnackBar(
                   buildSnackBar(value, snackMessage));
-              // Going back to the country page
-              Navigator.of(context).pop();
             });
           }
         },

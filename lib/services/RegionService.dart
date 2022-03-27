@@ -34,4 +34,25 @@ class RegionService{
       return List<Departement>.empty();
     }
   }
+
+  static Future<bool> createRegion(Departement departement) async {
+    final url = Uri.parse('http://10.0.2.2:8080/gsb/departements/');
+    var body = jsonEncode(departement.toJson());
+    final response = await http.post(
+        url,
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json"
+        },
+        body: body
+    );
+
+    if (response.statusCode == 201){
+      // 201 is the default "CREATED" status code
+      return true;
+    } else {
+      print('Une erreur est survenue lors de la l\'ajout du pays: Erreur '+response.statusCode.toString());;
+      return false;
+    }
+  }
 }

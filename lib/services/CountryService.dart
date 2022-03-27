@@ -46,9 +46,8 @@ class CountryService{
   }
 
   static Future<bool> createCountry(Country country) async {
-    print(country.nom);
     final url = Uri.parse('http://10.0.2.2:8080/gsb/pays/');
-    var body = jsonEncode({'nom': country.nom});
+    var body = jsonEncode(country.toJson());
     final response = await http.post(
         url,
         headers: {
