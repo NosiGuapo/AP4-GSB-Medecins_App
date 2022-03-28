@@ -65,4 +65,25 @@ class CountryService{
       return false;
     }
   }
+
+  static Future<bool> editCountry(Country country) async {
+    final url = Uri.parse('http://10.0.2.2:8080/gsb/pays/');
+    var body = jsonEncode(country.toJson());
+    final response = await http.put(
+        url,
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json"
+        },
+        body: body
+    );
+
+    if (response.statusCode == 202){
+      // 202 is the default "ACCEPTED" status code
+      return true;
+    } else {
+      print('Une erreur est survenue lors de la la modification du pays: Erreur '+response.statusCode.toString());;
+      return false;
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:ap4_gsbmedecins_appli/entities/Country.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/background.dart';
+import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/countryEditForm.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/regionAddForm.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/searchCountry.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/searchRegion.dart';
@@ -187,16 +188,13 @@ class _BodyState extends State<Body> {
                           backgroundColor: Colors.deepPurpleAccent.shade400,
                           icon: Icons.edit,
                           label: "Modifier",
-                          onPressed: null,
-                          // onPressed: (edit) {
-                          //   Navigator.of(context, rootNavigator: true).push(
-                          //     MaterialPageRoute(
-                          //       builder: (BuildContext context) =>
-                          //           DoctorProfile(
-                          //               doctorId: doctor.id!, isEdit: true),
-                          //     ),
-                          //   );
-                          // },
+                          onPressed: (edit) {
+                            Navigator.of(context, rootNavigator: true).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => EditCountry(country: country),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
