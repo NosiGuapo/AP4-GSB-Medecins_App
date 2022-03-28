@@ -35,7 +35,7 @@ class RegionService{
     }
   }
 
-  static Future<bool> createRegion(Departement departement) async {
+  static Future<List> createRegion(Departement departement) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/departements/');
     var body = jsonEncode(departement.toJson());
     final response = await http.post(
@@ -49,10 +49,9 @@ class RegionService{
 
     if (response.statusCode == 201){
       // 201 is the default "CREATED" status code
-      return true;
+      return [true, response.statusCode];
     } else {
-      print('Une erreur est survenue lors de la l\'ajout du pays: Erreur '+response.statusCode.toString());;
-      return false;
+      return [true, response.statusCode, "Une erreur est survenue lors de la l\'ajout de la Région"];
     }
   }
 }

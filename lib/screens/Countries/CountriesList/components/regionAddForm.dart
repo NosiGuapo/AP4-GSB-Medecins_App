@@ -116,13 +116,13 @@ class _AddRegionState extends State<AddRegion> {
             final add = RegionService.createRegion(region);
             add.then((value) {
               final String snackMessage;
-              if (value) {
+              if (value[0]) {
                 snackMessage = "Le département suivant a été ajouté avec succès: ${region.nom}.";
                 Navigator.of(context).pop();
               } else {
-                snackMessage = "Une erreur est survenue lors de l'ajout du département.";
+                snackMessage = value[1];
               }
-              ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(value, snackMessage));
+              ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(value[0], snackMessage));
             });
           }
         },
