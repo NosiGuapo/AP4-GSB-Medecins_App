@@ -33,19 +33,18 @@ class CountryService{
     }
   }
 
-  static Future<bool> deleteCountry(int id) async {
+  static Future<List> deleteCountry(int id) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/pays/'+id.toString());
     final response = await http.delete(url);
 
     if (response.statusCode == 200){
-      return true;
+      return [true, response.statusCode];
     } else {
-      print('Une erreur est survenue lors de la suppression du pays: Erreur '+response.statusCode.toString());;
-      return false;
+      return [false, response.statusCode, "Une erreur est survenue lors de la suppression du pays"];
     }
   }
 
-  static Future<bool> createCountry(Country country) async {
+  static Future<List> createCountry(Country country) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/pays/');
     var body = jsonEncode(country.toJson());
     final response = await http.post(
@@ -59,14 +58,13 @@ class CountryService{
 
     if (response.statusCode == 201){
       // 201 is the default "CREATED" status code
-      return true;
+      return [true, response.statusCode];
     } else {
-      print('Une erreur est survenue lors de la l\'ajout du pays: Erreur '+response.statusCode.toString());;
-      return false;
+      return [false, response.statusCode, "Une erreur est survenue lors de la l\'ajout du pays"];
     }
   }
 
-  static Future<bool> editCountry(Country country) async {
+  static Future<List> editCountry(Country country) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/pays/');
     var body = jsonEncode(country.toJson());
     final response = await http.put(
@@ -80,10 +78,9 @@ class CountryService{
 
     if (response.statusCode == 202){
       // 202 is the default "ACCEPTED" status code
-      return true;
+      return [true, response.statusCode];
     } else {
-      print('Une erreur est survenue lors de la la modification du pays: Erreur '+response.statusCode.toString());;
-      return false;
+      return [false, response.statusCode, "Une erreur est survenue lors de la la modification du pays"];
     }
   }
 }

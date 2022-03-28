@@ -7,10 +7,8 @@ import '../../../../services/CountryService.dart';
 
 class EditCountry extends StatefulWidget {
   final Country country;
-  const EditCountry({
-    required this.country,
-    Key? key
-  }) : super(key: key);
+
+  const EditCountry({required this.country, Key? key}) : super(key: key);
 
   @override
   State<EditCountry> createState() => _EditCountryState();
@@ -76,25 +74,27 @@ class _EditCountryState extends State<EditCountry> {
   }
 
   Widget buildSubmit(Country country) => ElevatedButton(
-    onPressed: () {
-      final isValid = formKey.currentState!.validate();
-      if (isValid) {
-        formKey.currentState?.save();
-        final add = CountryService.editCountry(country);
-        add.then((value) {
-          final String snackMessage;
-          if (value) {
-            snackMessage = "Le pays a été modifié avec succès: ${country.nom}.";
-            // Going back to the country page
-            Navigator.of(context).pop();
-          } else {
-            snackMessage = "Une erreur est survenue lors de la modification du pays.";
+        onPressed: () {
+          final isValid = formKey.currentState!.validate();
+          if (isValid) {
+            formKey.currentState?.save();
+            final add = CountryService.editCountry(country);
+            add.then((value) {
+              final String snackMessage;
+              if (value[0]) {
+                snackMessage = "Le pays ${country.nom} a été modifié avec succès.";
+                // Going back to the country page
+                Navigator.of(context).pop();
+              } else if (value[1] == 401) {
+                snackMessage = "Un pays avec ce nom existe déja.";
+              } else {
+                snackMessage = value[2];
+              }
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(buildSnackBar(value[0], snackMessage));
+            });
           }
-          ScaffoldMessenger.of(context).showSnackBar(
-              buildSnackBar(value, snackMessage));
-        });
-      }
-    },
-    child: const Text("Modifier"),
-  );
+        },
+        child: const Text("Modifier"),
+      );
 }

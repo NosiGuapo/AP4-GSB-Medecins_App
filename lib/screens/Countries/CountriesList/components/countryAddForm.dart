@@ -79,15 +79,17 @@ class _AddCountryState extends State<AddCountry> {
             final add = CountryService.createCountry(country);
             add.then((value) {
               final String snackMessage;
-              if (value) {
+              if (value[0]) {
                 snackMessage = "Le pays suivant a été ajouté avec succès: ${country.nom}.";
                 // Going back to the country page
                 Navigator.of(context).pop();
+              } else if (value[1] == 401) {
+                snackMessage = "Un pays avec ce nom existe déja.";
               } else {
-                snackMessage = "Une erreur est survenue lors de l'ajout du pays.";
+                snackMessage = value[2];
               }
               ScaffoldMessenger.of(context).showSnackBar(
-                  buildSnackBar(value, snackMessage));
+                  buildSnackBar(value[0], snackMessage));
             });
           }
         },

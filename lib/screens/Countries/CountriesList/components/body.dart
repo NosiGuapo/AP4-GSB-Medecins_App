@@ -170,16 +170,14 @@ class _BodyState extends State<Body> {
                                   CountryService.deleteCountry(country.id!);
                               delete.then((value) {
                                 final String snackMessage;
-                                if (value) {
-                                  snackMessage =
-                                      "Le pays suivant a été supprimé avec succès: ${country.nom}.";
+                                if (value[0]) {
+                                  snackMessage = "Le pays suivant a été supprimé avec succès: ${country.nom}.";
                                   listRefresh();
                                 } else {
-                                  snackMessage =
-                                      "Une erreur est survenue lors de la suppression du pays.";
+                                  snackMessage = value[2];
                                 }
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    buildSnackBar(value, snackMessage));
+                                    buildSnackBar(value[0], snackMessage));
                               });
                             }
                             // flex: 1,
