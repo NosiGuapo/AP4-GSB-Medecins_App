@@ -14,7 +14,6 @@ class CountryService{
       }).toList();
       return countries;
     } else {
-      print('Une erreur est survenue lors de l\'accès aux données (getDoctors): Erreur '+response.statusCode.toString());
       return List<Country>.empty();
     }
   }
@@ -28,7 +27,6 @@ class CountryService{
       var country = Country.fromJson(body);
       return country;
     } else {
-      print('Une erreur est survenue lors de l\'accès aux données (getCountryById): Erreur '+response.statusCode.toString());
       return null;
     }
   }
@@ -60,7 +58,7 @@ class CountryService{
       // 201 is the default "CREATED" status code
       return [true, response.statusCode];
     } else {
-      return [false, response.statusCode, "Une erreur est survenue lors de la l\'ajout du pays"];
+      return [false, response.statusCode, "Une erreur est survenue lors de la l'ajout du pays"];
     }
   }
 

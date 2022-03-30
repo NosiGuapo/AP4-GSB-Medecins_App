@@ -1,10 +1,9 @@
 import 'package:ap4_gsbmedecins_appli/constants.dart';
-import 'package:ap4_gsbmedecins_appli/screens/SignIn/signin_screen.dart';
-import 'package:ap4_gsbmedecins_appli/screens/SignUp/signup_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Welcome/components/background.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/primary_button.dart';
+import '../../SignIn/signin_screen.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -44,19 +43,6 @@ class Body extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const SignInScreen(),
-                ),
-              );
-            },
-          ),
-          RoundPcButton(
-            text: "Inscription",
-            colour: primaryLightColour,
-            textColour: Colors.black87,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SignUpScreen(),
                 ),
               );
             },

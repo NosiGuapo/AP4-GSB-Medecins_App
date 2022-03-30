@@ -156,50 +156,56 @@ class _BodyState extends State<Body> {
                 itemCount: countries.length,
                 itemBuilder: (context, index) {
                   final country = countries[index];
-                  return Slidable(
-                    // Actions on the right part of each slide
-                    endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                            backgroundColor: failSnackbar,
-                            icon: Icons.delete,
-                            label: "Supprimer",
-                            onPressed: (delete) {
-                              final delete =
-                                  CountryService.deleteCountry(country.id!);
-                              delete.then((value) {
-                                final String snackMessage;
-                                if (value[0]) {
-                                  snackMessage = "Le pays suivant a été supprimé avec succès: ${country.nom}.";
-                                  listRefresh();
-                                } else {
-                                  snackMessage = value[2];
+                  return Stack(
+                    children: [
+                      Slidable(
+                        // Actions on the right part of each slide
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                                backgroundColor: failSnackbar,
+                                icon: Icons.delete,
+                                label: "Supprimer",
+                                onPressed: (delete) {
+                                  final delete =
+                                      CountryService.deleteCountry(country.id!);
+                                  delete.then((value) {
+                                    final String snackMessage;
+                                    if (value[0]) {
+                                      snackMessage =
+                                          "Le pays suivant a été supprimé avec succès: ${country.nom}.";
+                                      listRefresh();
+                                    } else {
+                                      snackMessage = value[2];
+                                    }
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        buildSnackBar(value[0], snackMessage));
+                                  });
                                 }
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    buildSnackBar(value[0], snackMessage));
-                              });
-                            }
-                            // flex: 1,
+                                // flex: 1,
+                                ),
+                            SlidableAction(
+                              backgroundColor: Colors.deepPurpleAccent.shade400,
+                              icon: Icons.edit,
+                              label: "Modifier",
+                              onPressed: (edit) {
+                                Navigator.of(context, rootNavigator: true).push(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        EditCountry(country: country),
+                                  ),
+                                );
+                              },
                             ),
-                        SlidableAction(
-                          backgroundColor: Colors.deepPurpleAccent.shade400,
-                          icon: Icons.edit,
-                          label: "Modifier",
-                          onPressed: (edit) {
-                            Navigator.of(context, rootNavigator: true).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => EditCountry(country: country),
-                              ),
-                            );
-                          },
+                          ],
                         ),
-                      ],
-                    ),
-                    child: ListTile(
-                      title: Text(country.nom),
-                      onTap: null,
-                    ),
+                        child: ListTile(
+                          title: Text(country.nom),
+                          onTap: null,
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),
@@ -212,7 +218,3 @@ class _BodyState extends State<Body> {
     setState(() => countries.clear());
   }
 }
-
-
-
-
