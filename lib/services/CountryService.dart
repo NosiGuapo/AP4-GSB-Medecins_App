@@ -78,7 +78,7 @@ class CountryService{
       // 202 is the default "ACCEPTED" status code
       return [true, response.statusCode];
     } else {
-      return [false, response.statusCode, "Une erreur est survenue lors de la la modification du pays"];
+      return [false, response.statusCode, "Une erreur est survenue lors de la modification du pays"];
     }
   }
 }

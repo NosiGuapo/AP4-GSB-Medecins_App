@@ -18,7 +18,7 @@ class Body extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-              margin: const EdgeInsets.symmetric(vertical: 60),
+              margin: const EdgeInsets.symmetric(vertical: 40),
               child: Image(
                 // image: NetworkImage("https://source.unsplash.com/random"),
                 // GSB Logo
@@ -34,6 +34,7 @@ class Body extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
+          const SizedBox(height: 95),
           RoundPcButton(
             // Actions and text may vary, we need to specify its content and action
             text: "Connexion",
