@@ -31,7 +31,25 @@ class AuthService{
   static Future<Auth> getSession() async {
     var accessToken = await FlutterSession().get('access_token');
     var refreshToken = await FlutterSession().get('refresh_token');
-    Auth session = Auth(accessToken: accessToken, refreshToken: refreshToken);
+    var username = await FlutterSession().get('username');
+    var fname = await FlutterSession().get('fname');
+    var lname = await FlutterSession().get('lname');
+
+    Auth session = Auth(
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      username: username,
+      fname: fname,
+      lname: lname
+    );
     return session;
+  }
+
+  static Future<void> setSession(Auth credentials) async {
+    await FlutterSession().set('access_token', credentials.accessToken);
+    await FlutterSession().set('refresh_token', credentials.refreshToken);
+    await FlutterSession().set('username', credentials.username);
+    await FlutterSession().set('lname', credentials.lname);
+    await FlutterSession().set('fname', credentials.fname);
   }
 }

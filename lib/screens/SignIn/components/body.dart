@@ -1,3 +1,4 @@
+import 'package:ap4_gsbmedecins_appli/screens/Profile/profile_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/SignIn/components/background.dart';
 import 'package:ap4_gsbmedecins_appli/services/AuthService.dart';
 import 'package:flutter/material.dart';
@@ -58,9 +59,10 @@ class _BodyState extends State<Body> {
                       return null;
                     }
                   },
-                  onChanged: (value) => setState(() {
-                    username = value;
-                  }),
+                  onChanged: (value) =>
+                      setState(() {
+                        username = value;
+                      }),
                   style: const TextStyle(fontFamily: 'Roboto', fontSize: 12),
                 ),
                 const SizedBox(height: 25),
@@ -81,9 +83,10 @@ class _BodyState extends State<Body> {
                       return null;
                     }
                   },
-                  onChanged: (value) => setState(() {
-                    password = value;
-                  }),
+                  onChanged: (value) =>
+                      setState(() {
+                        password = value;
+                      }),
                   style: const TextStyle(fontFamily: 'Roboto', fontSize: 12),
                 ),
                 const SizedBox(height: 55),
@@ -96,30 +99,45 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget buildSubmit(String username, String password) => ElevatedButton(
-    onPressed: () {
-      final isValid = formKey.currentState!.validate();
-      if (isValid) {
-        formKey.currentState?.save();
-        final logTest = AuthService.attemptAuthentication(username, password);
-        logTest.then((value) {
-          final String snackMessage;
-          if (value[0]) {
-            // Setting up session
-            Future<void> saveData(context) async {
-              await FlutterSession().set('access_token', value[3]);
-              await FlutterSession().set('refresh_token', value[4]);
-            }
-            saveData(context);
-            snackMessage = value[2]+" $username";
-          } else {
-            snackMessage = value[2];
+  Widget buildSubmit(String username, String password) =>
+      ElevatedButton(
+        onPressed: () {
+          final isValid = formKey.currentState!.validate();
+          if (isValid) {
+            formKey.currentState?.save();
+            final logTest = AuthService.attemptAuthentication(
+                username, password);
+            logTest.then((value) {
+              if (value[0]) {
+                // Setting up session
+                setUpSession(value[3], value[4]);
+              } else {
+                final String snackMessage = value[2];
+                ScaffoldMessenger.of(context).showSnackBar(
+                    buildSnackBar(value[0], snackMessage));
+              }
+            });
           }
-          ScaffoldMessenger.of(context).showSnackBar(
-              buildSnackBar(value[0], snackMessage));
-        });
-      }
-    },
-    child: const Text("Connexion"),
-  );
+        },
+        child: const Text("Connexion"),
+      );
+
+  Widget setUpSession(String accessToken, String refreshToken) {
+    Future<void> setTokens() async {
+      await FlutterSession().set('access_token', accessToken);
+      await FlutterSession().set('refresh_token', refreshToken);
+    }
+
+    setTokens().then((value){
+      ScaffoldMessenger.of(context).showSnackBar(
+          buildSnackBar(true, "Connexion réussie, bienvenue."));
+
+      Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(
+          builder: (BuildContext context) => const ProfileScreen(),
+        ),
+      );
+    });
+    return Container();
+  }
 }
