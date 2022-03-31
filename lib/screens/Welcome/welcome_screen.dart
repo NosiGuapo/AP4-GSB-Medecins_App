@@ -1,7 +1,5 @@
-// import 'package:ap4_gsbmedecins_appli/screens/Profile/ShowProfile/profile_screen.dart';
-// import 'package:ap4_gsbmedecins_appli/screens/Settings/settings_screen.dart';
-// import 'package:ap4_gsbmedecins_appli/screens/SignIn/signin_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/countries_screen.dart';
+import 'package:ap4_gsbmedecins_appli/screens/Profile/profile_screen.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Welcome/components/body.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorList/doctors_screen.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +41,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Body(),
           DoctorsScreen(),
           CountriesScreen(),
-          // ProfileScreen(),
-          // SettingsScreen(),
-          // SignInScreen()
+          ProfileScreen(),
         ],
       ),
       // Bottom navigation bar
@@ -66,18 +62,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             icon: Icon(Icons.room),
             label: "Pays/Départements",
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.account_circle_sharp),
-          //   label: "Profile",
-          // ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.settings),
-          //   label: "Paramètres",
-          // ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.account_balance_rounded),
-          //   label: "Sign in",
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: "Profil",
+          ),
         ],
         // Icons colour while active
         fixedColor: primaryColour,

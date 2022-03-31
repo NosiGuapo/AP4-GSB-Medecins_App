@@ -105,10 +105,12 @@ class _BodyState extends State<Body> {
         logTest.then((value) {
           final String snackMessage;
           if (value[0]) {
+            // Setting up session
             Future<void> saveData(context) async {
               await FlutterSession().set('access_token', value[3]);
               await FlutterSession().set('refresh_token', value[4]);
             }
+            saveData(context);
             snackMessage = value[2]+" $username";
           } else {
             snackMessage = value[2];

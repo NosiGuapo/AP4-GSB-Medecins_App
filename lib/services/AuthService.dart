@@ -1,3 +1,4 @@
+import 'package:flutter_session/flutter_session.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -25,5 +26,12 @@ class AuthService{
     } else {
       return [false, response.statusCode, "L'utilisateur spécifié n'apparait pas dans nos registres."];
     }
+  }
+
+  static Future<Auth> getSession() async {
+    var accessToken = await FlutterSession().get('access_token');
+    var refreshToken = await FlutterSession().get('refresh_token');
+    Auth session = Auth(accessToken: accessToken, refreshToken: refreshToken);
+    return session;
   }
 }
