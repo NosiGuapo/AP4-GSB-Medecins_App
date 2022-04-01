@@ -1,8 +1,9 @@
-import 'package:ap4_gsbmedecins_appli/screens/Profile/profile_screen.dart';
+import 'package:ap4_gsbmedecins_appli/entities/Auth.dart';
 import 'package:ap4_gsbmedecins_appli/screens/SignIn/components/background.dart';
+import 'package:ap4_gsbmedecins_appli/screens/Welcome/welcome_screen.dart';
 import 'package:ap4_gsbmedecins_appli/services/AuthService.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_session/flutter_session.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../../../components/snackbar.dart';
 
@@ -59,10 +60,9 @@ class _BodyState extends State<Body> {
                       return null;
                     }
                   },
-                  onChanged: (value) =>
-                      setState(() {
-                        username = value;
-                      }),
+                  onChanged: (value) => setState(() {
+                    username = value;
+                  }),
                   style: const TextStyle(fontFamily: 'Roboto', fontSize: 12),
                 ),
                 const SizedBox(height: 25),
@@ -83,10 +83,9 @@ class _BodyState extends State<Body> {
                       return null;
                     }
                   },
-                  onChanged: (value) =>
-                      setState(() {
-                        password = value;
-                      }),
+                  onChanged: (value) => setState(() {
+                    password = value;
+                  }),
                   style: const TextStyle(fontFamily: 'Roboto', fontSize: 12),
                 ),
                 const SizedBox(height: 55),
@@ -99,22 +98,21 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget buildSubmit(String username, String password) =>
-      ElevatedButton(
+  Widget buildSubmit(String username, String password) => ElevatedButton(
         onPressed: () {
           final isValid = formKey.currentState!.validate();
           if (isValid) {
             formKey.currentState?.save();
-            final logTest = AuthService.attemptAuthentication(
-                username, password);
+            final logTest =
+                AuthService.attemptAuthentication(username, password);
             logTest.then((value) {
               if (value[0]) {
                 // Setting up session
                 setUpSession(value[3], value[4]);
               } else {
                 final String snackMessage = value[2];
-                ScaffoldMessenger.of(context).showSnackBar(
-                    buildSnackBar(value[0], snackMessage));
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(buildSnackBar(value[0], snackMessage));
               }
             });
           }
@@ -123,19 +121,33 @@ class _BodyState extends State<Body> {
       );
 
   Widget setUpSession(String accessToken, String refreshToken) {
-    Future<void> setTokens() async {
-      await FlutterSession().set('access_token', accessToken);
-      await FlutterSession().set('refresh_token', refreshToken);
-    }
+    // Decode token to retrieve all user infos
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
+    // List<dynamic> extract = decodedToken['roles'];
+    // List<String> roles = extract.map((e) => e as String).toList();
 
-    setTokens().then((value){
-      ScaffoldMessenger.of(context).showSnackBar(
-          buildSnackBar(true, "Connexion réussie, bienvenue."));
+    Auth user = Auth(
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      username: decodedToken['username'],
+      lname: decodedToken['lname'],
+      fname: decodedToken['fname'],
+      // roles: roles
+    );
+    Future<void> setSession = AuthService.setSession(user);
 
-      Navigator.of(context, rootNavigator: true).push(
+    setSession.then((value) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(buildSnackBar(true, "Connexion réussie.\nBienvenue, ${user.fname} ${user.lname}"));
+
+      // Pushing to a brand new page, we dont want
+      // to be able to go back and re-log in
+      Navigator.pushAndRemoveUntil(
+        context,
         MaterialPageRoute(
-          builder: (BuildContext context) => const ProfileScreen(),
+          builder: (BuildContext context) => const WelcomeLogged(),
         ),
+       (Route<dynamic> route) => false,
       );
     });
     return Container();

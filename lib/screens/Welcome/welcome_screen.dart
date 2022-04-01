@@ -5,16 +5,14 @@ import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorList/doctors_screen.
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 
-// stless to trigger the class
-// stful to trigger the other kind
-class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+class WelcomeLogged extends StatefulWidget {
+  const WelcomeLogged({Key? key}) : super(key: key);
 
   @override
-  State<WelcomeScreen> createState() => _WelcomeScreenState();
+  State<WelcomeLogged> createState() => _WelcomeLoggedState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeLoggedState extends State<WelcomeLogged> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentIndex = 0;
 
@@ -38,7 +36,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         children: const <Widget>[
           // Setting up multiple body makes the user able to swipe from a body to another, however the global structure will be kept (Header etc)
           // The current setup is momentary and will be improved when the complete auth system is up
-          Body(),
           DoctorsScreen(),
           CountriesScreen(),
           ProfileScreen(),
@@ -50,10 +47,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         onTap: (index) => _pageController.jumpToPage(index),
         items: const <BottomNavigationBarItem>[
           // A Navbar required more than a single item in order to work
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Accueil",
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.content_paste),
             label: "Médecins",
@@ -73,6 +66,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         unselectedItemColor: Colors.black38,
         backgroundColor: Colors.white,
       ),
+    );
+  }
+}
+
+class WelcomeAnonymous extends StatelessWidget {
+  const WelcomeAnonymous({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+        body: Body()
     );
   }
 }

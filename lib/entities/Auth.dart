@@ -2,18 +2,19 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'Auth.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Auth{
   @JsonKey()
-  final String accessToken, refreshToken;
-  final String? username, fname, lname;
+  final String? access_token, refresh_token, username, fname, lname;
+  final List<String>? roles;
 
   Auth({
-    required this.accessToken,
-    required this.refreshToken,
+    this.access_token,
+    this.refresh_token,
     this.username,
     this.fname,
-    this.lname
+    this.lname,
+    this.roles
   });
 
   factory Auth.fromJson(Map<String, dynamic> json) => _$AuthFromJson(json);
