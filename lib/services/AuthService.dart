@@ -5,8 +5,7 @@ import 'dart:convert';
 import '../entities/Auth.dart';
 
 class AuthService {
-  static Future<List> attemptAuthentication(
-      String username, String password) async {
+  static Future<List> attemptAuthentication(String username, String password) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/login');
     final response = await http.put(url, headers: {
       "Accept": "application/x-www-form-urlencoded",
@@ -22,7 +21,7 @@ class AuthService {
       return [
         true,
         response.statusCode,
-        "Connexion réussie, bienvenue",
+        "Connexion réussie.",
         credentials.access_token,
         credentials.refresh_token
       ];
@@ -36,20 +35,13 @@ class AuthService {
   }
 
   static Future<Auth> getSession() async {
-    var accessToken = await FlutterSession().get('access_token');
-    var refreshToken = await FlutterSession().get('refresh_token');
-    var username = await FlutterSession().get('username');
-    var fname = await FlutterSession().get('fname');
-    var lname = await FlutterSession().get('lname');
-    // var roles = await FlutterSession().get('roles');
-
     Auth session = Auth(
-        access_token: accessToken,
-        refresh_token: refreshToken,
-        username: username,
-        fname: fname,
-        lname: lname,
-        // roles: roles
+        refresh_token: await FlutterSession().get('refresh_token'),
+        username: await FlutterSession().get('username'),
+        fname: await FlutterSession().get('fname'),
+        lname: await FlutterSession().get('lname'),
+        access_token: await FlutterSession().get('access_token'),
+      // roles: await FlutterSession().get('roles')
     );
     return session;
   }
@@ -60,7 +52,7 @@ class AuthService {
     await FlutterSession().set('username', credentials.username);
     await FlutterSession().set('lname', credentials.lname);
     await FlutterSession().set('fname', credentials.fname);
-    // await FlutterSession().set('roles', List<String>.empty());
+    // await FlutterSession().set('roles', credentials.roles?.first);
   }
 
   static Future<List> destroySession() async {
@@ -72,5 +64,30 @@ class AuthService {
     await FlutterSession().set('roles', '');
 
     return [true, "Vous avez été déconnecté."];
+  }
+
+  static Future<List> refreshToken(Auth user) async {
+    final url = Uri.parse('http://10.0.2.2:8080/gsb/token/refresh');
+    var token = "GSB_WT ${user.access_token}";
+    List result;
+    print(token);
+
+    final response = await http.get(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      // "GSB WT " is here to identify the token
+      "Authorization": token
+    });
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> body = json.decode(utf8.decode(response.bodyBytes));
+      var newToken = Auth.fromJson(body);
+      print(newToken.access_token);
+      await FlutterSession().set('access_token', newToken.access_token);
+      result = [true, response.statusCode, "Jeton mis à jour."];
+    } else {
+      result = [false, response.statusCode, "Une erreur est survenue lors du rafraîchissement du jeton."];
+    }
+    return result;
   }
 }
