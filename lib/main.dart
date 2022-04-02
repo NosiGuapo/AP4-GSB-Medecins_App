@@ -8,7 +8,7 @@ void main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: "GSB Médecins",
-    home: token != '' ?  const WelcomeLogged() : const WelcomeAnonymous(),
+    home: token != '' && token != null ?  const WelcomeLogged() : const WelcomeAnonymous(),
   ));
 }
 
