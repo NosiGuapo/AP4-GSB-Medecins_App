@@ -28,8 +28,13 @@ class CountryService{
 
   static Future<Country?> getCountryById(int? id) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/pays/'+id.toString());
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
 
-    final response = await http.get(url);
+    final response = await http.get(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
     if (response.statusCode == 200){
       Map<String, dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       var country = Country.fromJson(body);
@@ -41,8 +46,13 @@ class CountryService{
 
   static Future<List> deleteCountry(int id) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/pays/'+id.toString());
-    final response = await http.delete(url);
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
 
+    final response = await http.delete(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
     if (response.statusCode == 200){
       return [true, response.statusCode];
     } else {
@@ -52,12 +62,14 @@ class CountryService{
 
   static Future<List> createCountry(Country country) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/pays/');
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
     var body = jsonEncode(country.toJson());
     final response = await http.post(
         url,
         headers: {
           "Accept": "application/json",
-          "content-type": "application/json"
+          "content-type": "application/json",
+          "Authorization": await FlutterSession().get('access_token')
         },
         body: body
       );
@@ -72,12 +84,15 @@ class CountryService{
 
   static Future<List> editCountry(Country country) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/pays/');
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
+
     var body = jsonEncode(country.toJson());
     final response = await http.put(
         url,
         headers: {
           "Accept": "application/json",
-          "content-type": "application/json"
+          "content-type": "application/json",
+          "Authorization": await FlutterSession().get('access_token')
         },
         body: body
     );
