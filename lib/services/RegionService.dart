@@ -1,12 +1,19 @@
 import 'package:ap4_gsbmedecins_appli/entities/Departement.dart';
+import 'package:ap4_gsbmedecins_appli/services/AuthService.dart';
+import 'package:flutter_session/flutter_session.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class RegionService{
   static Future<List<Departement>> getRegions() async{
     final url = Uri.parse('http://10.0.2.2:8080/gsb/departements');
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
 
-    final response = await http.get(url);
+    final response = await http.get(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
     if (response.statusCode == 200){
       List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       var regions = body.map((body) {
@@ -21,8 +28,13 @@ class RegionService{
 
   static Future<List<Departement>> getRegionsOfCountry(int id) async{
     final url = Uri.parse('http://10.0.2.2:8080/gsb/pays/'+id.toString()+'/departements');
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
 
-    final response = await http.get(url);
+    final response = await http.get(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
     if (response.statusCode == 200){
       List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       var regions = body.map((body) {
@@ -37,12 +49,15 @@ class RegionService{
 
   static Future<List> createRegion(Departement departement) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/departements/');
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
+
     var body = jsonEncode(departement.toJson());
     final response = await http.post(
         url,
         headers: {
           "Accept": "application/json",
-          "content-type": "application/json"
+          "content-type": "application/json",
+          "Authorization": await FlutterSession().get('access_token')
         },
         body: body
     );
