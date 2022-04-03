@@ -48,7 +48,7 @@ class AuthService {
   }
 
   static Future<void> setSession(Auth credentials) async {
-    await FlutterSession().set('access_token', credentials.access_token);
+    await FlutterSession().set('access_token', 'GSB_WT ${credentials.access_token}');
     await FlutterSession().set('refresh_token', credentials.refresh_token);
     await FlutterSession().set('username', credentials.username);
     await FlutterSession().set('lname', credentials.lname);
@@ -69,15 +69,14 @@ class AuthService {
 
   static Future<List> refreshToken(String currentToken) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/token/refresh');
-    var token = "GSB_WT $currentToken";
     List result;
-    print('Ancien token:\n$token');
+    print('Ancien token:\n$currentToken');
 
     final response = await http.get(url, headers: {
       "Accept": "application/json",
       "content-type": "application/json",
       // "GSB WT " is here to identify the token
-      "Authorization": token
+      "Authorization": currentToken
     });
 
     if (response.statusCode == 200) {
