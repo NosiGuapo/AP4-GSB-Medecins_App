@@ -69,4 +69,20 @@ class RegionService{
       return [true, response.statusCode, "Une erreur est survenue lors de la l\'ajout de la Région"];
     }
   }
+
+  static Future<List> deleteRegion(int id) async {
+    final url = Uri.parse('http://10.0.2.2:8080/gsb/departements/'+id.toString());
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
+
+    final response = await http.delete(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
+    if (response.statusCode == 200){
+      return [true, response.statusCode];
+    } else {
+      return [false, response.statusCode, "Une erreur est survenue lors de la suppression du département"];
+    }
+  }
 }

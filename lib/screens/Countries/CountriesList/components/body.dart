@@ -2,6 +2,7 @@ import 'package:ap4_gsbmedecins_appli/entities/Country.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/background.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/countryEditForm.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/regionAddForm.dart';
+import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/regionsList.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/searchCountry.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/searchRegion.dart';
 import 'package:ap4_gsbmedecins_appli/services/CountryService.dart';
@@ -202,7 +203,12 @@ class _BodyState extends State<Body> {
                         ),
                         child: ListTile(
                           title: Text(country.nom),
-                          onTap: null,
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  RegionList(country: country),
+                            ),
+                          ),
                         ),
                       ),
                     ],
