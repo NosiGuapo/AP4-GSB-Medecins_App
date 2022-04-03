@@ -132,12 +132,7 @@ class _BodyState extends State<Body> {
                                   snackMessage =
                                       "Le médecin ${doctor.prenom} ${doctor.nom} a été supprimé avec succès.";
                                   // Refreshing the list on delete
-                                  if (mounted) {
-                                    listRefresh();
-                                  } else {
-                                    // Actions
-
-                                  }
+                                  listRefresh();
                                 } else {
                                   snackMessage =
                                       "Une erreur est survenue lors de la suppression du médecin.";
@@ -287,7 +282,6 @@ class _SectorSearchState extends State<SectorSearch> {
   late Set<String> specs;
   late String? fieldValue = specs.first;
   late List<Doctor> doctors;
-  final listApp = _BodyState();
 
   @override
   Widget build(BuildContext context) {
@@ -352,7 +346,139 @@ class _SectorSearchState extends State<SectorSearch> {
                                       doctors = snapshot.data!;
                                       return Padding(
                                         padding: const EdgeInsets.only(top: 75),
-                                        child: listApp.buildDoctors(doctors),
+                                        child: Stack(
+                                          children: <Widget>[
+                                            Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 16),
+                                                child: Text(
+                                                    "${doctors.length} Résultats.")),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 38),
+                                              child: RefreshIndicator(
+                                                onRefresh: listRefresh,
+                                                color: primaryColour,
+                                                strokeWidth: 2,
+                                                child: ListView.builder(
+                                                  // physics: const BouncingScrollPhysics(),
+                                                  itemCount: doctors.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    final doctor =
+                                                        doctors[index];
+                                                    return Slidable(
+                                                      // Actions on the right part of each slide
+                                                      endActionPane: ActionPane(
+                                                        motion:
+                                                            const ScrollMotion(),
+                                                        children: [
+                                                          SlidableAction(
+                                                              backgroundColor:
+                                                                  failSnackbar,
+                                                              icon:
+                                                                  Icons.delete,
+                                                              label:
+                                                                  "Supprimer",
+                                                              onPressed:
+                                                                  (delete) {
+                                                                final delete =
+                                                                    DoctorService
+                                                                        .deleteDoctor(
+                                                                            doctor.id!);
+                                                                delete.then(
+                                                                    (value) {
+                                                                  final String
+                                                                      snackMessage;
+                                                                  if (value) {
+                                                                    snackMessage =
+                                                                        "Le médecin ${doctor.prenom} ${doctor.nom} a été supprimé avec succès.";
+                                                                    // Refreshing the list on delete
+                                                                    listRefresh();
+                                                                  } else {
+                                                                    snackMessage =
+                                                                        "Une erreur est survenue lors de la suppression du médecin.";
+                                                                  }
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(buildSnackBar(
+                                                                          value,
+                                                                          snackMessage));
+                                                                });
+                                                              }
+                                                              // flex: 1,
+                                                              ),
+                                                          SlidableAction(
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .deepPurpleAccent
+                                                                      .shade400,
+                                                              icon: Icons.edit,
+                                                              label: "Modifier",
+                                                              onPressed:
+                                                                  (edit) {
+                                                                Navigator.of(
+                                                                        context,
+                                                                        rootNavigator:
+                                                                            true)
+                                                                    .push(
+                                                                  MaterialPageRoute(
+                                                                    builder: (BuildContext context) => DoctorProfile(
+                                                                        doctorId:
+                                                                            doctor
+                                                                                .id!,
+                                                                        isEdit:
+                                                                            true),
+                                                                  ),
+                                                                );
+                                                              }),
+                                                        ],
+                                                      ),
+                                                      child: ListTile(
+                                                        title: Text(
+                                                            doctor.prenom +
+                                                                " " +
+                                                                doctor.nom),
+                                                        subtitle: Text(
+                                                            doctor.adresse),
+                                                        leading: CircleAvatar(
+                                                          child: ClipOval(
+                                                              child:
+                                                                  ColorFiltered(
+                                                            colorFilter:
+                                                                const ColorFilter
+                                                                        .mode(
+                                                                    Colors
+                                                                        .white54,
+                                                                    BlendMode
+                                                                        .lighten),
+                                                            child: Image.asset(
+                                                                "assets/images/profile.png"),
+                                                          )),
+                                                          backgroundColor:
+                                                              primaryColour,
+                                                        ),
+                                                        onTap: () =>
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(
+                                                          MaterialPageRoute(
+                                                            builder: (BuildContext
+                                                                    context) =>
+                                                                DoctorProfile(
+                                                                    doctorId:
+                                                                        doctor
+                                                                            .id!),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       );
                                     }
                                 }
@@ -369,6 +495,10 @@ class _SectorSearchState extends State<SectorSearch> {
         ),
       ),
     );
+  }
+
+  Future listRefresh() async {
+    setState(() => doctors.clear());
   }
 
   DropdownMenuItem<String> buildMenuItem(String item) =>
