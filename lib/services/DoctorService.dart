@@ -1,4 +1,6 @@
 import 'package:ap4_gsbmedecins_appli/entities/Doctor.dart';
+import 'package:ap4_gsbmedecins_appli/services/AuthService.dart';
+import 'package:flutter_session/flutter_session.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -12,8 +14,13 @@ class DoctorService{
       // If not null : a search is currently happening, we display the doctors by their name
       url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/name?name='+value.toString());
     }
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
 
-    final response = await http.get(url);
+    final response = await http.get(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
     if (response.statusCode == 200){
       List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       var doctors = body.map((body) {
@@ -28,8 +35,13 @@ class DoctorService{
 
   static Future<Doctor?> getDoctorById(int? id) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/'+id.toString());
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
 
-    final response = await http.get(url);
+    final response = await http.get(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
     if (response.statusCode == 200){
       Map<String, dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       var doctor = Doctor.fromJson(body);
@@ -42,8 +54,13 @@ class DoctorService{
 
   static Future<Set<String>> getSpecs() async{
     final url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/specs');;
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
 
-    final response = await http.get(url);
+    final response = await http.get(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
     if (response.statusCode == 200){
       Set<String> body = Set<String>.from(json.decode(utf8.decode(response.bodyBytes)));
       return body;
@@ -54,9 +71,14 @@ class DoctorService{
   }
 
   static Future<List<Doctor>> getDoctorsBySpec(String spec) async{
-    final url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/spec?spec='+spec.toString());;
+    final url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/spec?spec='+spec.toString());
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
 
-    final response = await http.get(url);
+    final response = await http.get(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
     if (response.statusCode == 200){
       List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       var doctors = body.map((body) {
@@ -71,8 +93,13 @@ class DoctorService{
 
   static Future<List<Doctor>> getDoctorsOfRegion(int regionId) async{
     final url = Uri.parse('http://10.0.2.2:8080/gsb/departements/'+regionId.toString()+'/medecins');
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));;
 
-    final response = await http.get(url);
+    final response = await http.get(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
     if (response.statusCode == 200){
       List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       var doctors = body.map((body) {
@@ -87,8 +114,13 @@ class DoctorService{
 
   static Future<List<Doctor>> getDoctorsOfCountry(int countryId) async{
     final url = Uri.parse('http://10.0.2.2:8080/gsb/pays/'+countryId.toString()+'/medecins');
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
 
-    final response = await http.get(url);
+    final response = await http.get(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
     if (response.statusCode == 200){
       List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       var doctors = body.map((body) {
@@ -103,8 +135,13 @@ class DoctorService{
 
   static Future<bool> deleteDoctor(int id) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/'+id.toString());
-    // final url = Uri.parse('http://172.31.1.95:8080/gsb/medecins/delete/'+id.toString());
-    final response = await http.delete(url);
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
+
+    final response = await http.delete(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": await FlutterSession().get('access_token')
+    });
 
     if (response.statusCode == 200){
       return true;
@@ -116,12 +153,15 @@ class DoctorService{
 
   static Future<bool> createDoctor(Doctor doctor) async {
     final url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/');
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
+
     var body = jsonEncode(doctor.toJson());
     final response = await http.post(
         url,
         headers: {
           "Accept": "application/json",
-          "content-type": "application/json"
+          "content-type": "application/json",
+          "Authorization": await FlutterSession().get('access_token')
         },
         body: body
     );
