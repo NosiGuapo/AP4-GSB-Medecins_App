@@ -49,7 +49,7 @@ class AuthService {
 
   static Future<void> setSession(Auth credentials) async {
     await FlutterSession().set('access_token', 'GSB_WT ${credentials.access_token}');
-    await FlutterSession().set('refresh_token', credentials.refresh_token);
+    await FlutterSession().set('refresh_token', 'GSB_WT ${credentials.refresh_token}');
     await FlutterSession().set('username', credentials.username);
     await FlutterSession().set('lname', credentials.lname);
     await FlutterSession().set('fname', credentials.fname);
@@ -67,39 +67,36 @@ class AuthService {
     return [true, "Vous avez été déconnecté."];
   }
 
-  static Future<List> refreshToken(String currentToken) async {
-    final url = Uri.parse('http://10.0.2.2:8080/gsb/token/refresh');
+  static Future<List> refreshToken(String currentAccessToken) async {
     List result;
-    print('Ancien token:\n$currentToken');
-
-    final response = await http.get(url, headers: {
-      "Accept": "application/json",
-      "content-type": "application/json",
-      // "GSB WT " is here to identify the token
-      "Authorization": currentToken
-    });
-
-    if (response.statusCode == 200) {
-      Map<String, dynamic> body = json.decode(utf8.decode(response.bodyBytes));
-      var newToken = Auth.fromJson(body);
-      await FlutterSession().set('access_token', 'GSB_WT ${newToken.access_token}');
-      print('Nouveau token:\nGSB_WT ${newToken.access_token}');
-      result = [true, response.statusCode, "Jeton mis à jour."];
-    } else {
-      result = [false, response.statusCode, "Une erreur est survenue lors du rafraîchissement du jeton."];
-    }
-    return result;
-  }
-
-  static Future<bool> refreshChecker(String currentToken) async {
-    bool hasExpired = JwtDecoder.isExpired(currentToken);
+    bool hasExpired = JwtDecoder.isExpired(currentAccessToken);
     if (hasExpired){
       print ('Le token de l\'utilisateur est expiré, mise a jour du token.');
-      await refreshToken(currentToken);
-      return true;
+      // Updating token
+      var refreshToken = await FlutterSession().get('refresh_token');
+      final url = Uri.parse('http://10.0.2.2:8080/gsb/token/refresh');
+      print('Ancien token:\n$currentAccessToken');
+
+      final response = await http.get(url, headers: {
+        "Accept": "application/json",
+        "content-type": "application/json",
+        // "GSB WT " is here to identify the token
+        "Authorization": refreshToken
+      });
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> body = json.decode(utf8.decode(response.bodyBytes));
+        var newToken = Auth.fromJson(body);
+        await FlutterSession().set('access_token', 'GSB_WT ${newToken.access_token}');
+        print('Nouveau token:\nGSB_WT ${newToken.access_token}');
+        result = [true, "Jeton mis à jour."];
+      } else {
+        result = [false, "Une erreur est survenue lors du rafraîchissement du jeton."];
+      }
     } else {
       print('Le token de l\'utilisateur est à jour.');
-      return false;
+      result = [true, "Votre jeton est déja à jour."];
     }
+    return result;
   }
 }

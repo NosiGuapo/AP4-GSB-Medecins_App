@@ -205,7 +205,7 @@ class _BodyState extends State<Body> {
     var process = AuthService.refreshToken(userSession.access_token!);
     process.then((value) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(buildSnackBar(value[0], value[2]));
+          .showSnackBar(buildSnackBar(value[0], value[1]));
     });
     return Container();
   }
