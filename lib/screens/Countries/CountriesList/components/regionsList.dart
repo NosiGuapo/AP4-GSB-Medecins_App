@@ -1,6 +1,7 @@
 import 'package:ap4_gsbmedecins_appli/components/snackbar.dart';
 import 'package:ap4_gsbmedecins_appli/entities/Departement.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/background.dart';
+import 'package:ap4_gsbmedecins_appli/screens/Countries/CountriesList/components/regionEditForm.dart';
 import 'package:ap4_gsbmedecins_appli/services/RegionService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -108,12 +109,12 @@ class _RegionListState extends State<RegionList> {
                           icon: Icons.edit,
                           label: "Modifier",
                           onPressed: (edit) {
-                            // Navigator.of(context, rootNavigator: true).push(
-                            //   MaterialPageRoute(
-                            //     builder: (BuildContext context) =>
-                            //         EditCountry(country: country),
-                            //   ),
-                            // );
+                            Navigator.of(context, rootNavigator: true).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    EditRegion(region: region),
+                              ),
+                            );
                           },
                         ),
                       ],

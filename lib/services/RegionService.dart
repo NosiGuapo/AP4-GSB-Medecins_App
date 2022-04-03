@@ -85,4 +85,27 @@ class RegionService{
       return [false, response.statusCode, "Une erreur est survenue lors de la suppression du département"];
     }
   }
+
+  static Future<List> editRegion(Departement region) async {
+    final url = Uri.parse('http://10.0.2.2:8080/gsb/departements/');
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
+
+    var body = jsonEncode(region.toJson());
+    final response = await http.put(
+        url,
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Authorization": await FlutterSession().get('access_token')
+        },
+        body: body
+    );
+
+    if (response.statusCode == 202){
+      // 202 is the default "ACCEPTED" status code
+      return [true, response.statusCode];
+    } else {
+      return [false, response.statusCode, "Une erreur est survenue lors de la modification du département"];
+    }
+  }
 }
