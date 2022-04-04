@@ -173,4 +173,27 @@ class DoctorService{
       return false;
     }
   }
+
+  static Future<List> editDoctor(Doctor doctor) async {
+    final url = Uri.parse('http://10.0.2.2:8080/gsb/medecins/');
+    await AuthService.refreshToken(await FlutterSession().get('access_token'));
+
+    var body = jsonEncode(doctor.toJson());
+    final response = await http.put(
+        url,
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Authorization": await FlutterSession().get('access_token')
+        },
+        body: body
+    );
+
+    if (response.statusCode == 202){
+      // 202 is the default "ACCEPTED" status code
+      return [true, response.statusCode];
+    } else {
+      return [false, response.statusCode, "Une erreur est survenue lors de la modification du médecin"];
+    }
+  }
 }

@@ -1,7 +1,10 @@
+import 'package:ap4_gsbmedecins_appli/entities/Departement.dart';
 import 'package:ap4_gsbmedecins_appli/entities/Doctor.dart';
 import 'package:ap4_gsbmedecins_appli/services/DoctorService.dart';
+import 'package:ap4_gsbmedecins_appli/services/RegionService.dart';
 import 'package:flutter/material.dart';
 import 'package:ap4_gsbmedecins_appli/screens/Doctors/DoctorPage/components/background.dart';
+import '../../../../components/snackbar.dart';
 import '../../../../constants.dart';
 
 class DoctorProfile extends StatefulWidget {
@@ -17,6 +20,10 @@ class DoctorProfile extends StatefulWidget {
 
 class _DoctorProfileState extends State<DoctorProfile> {
   late Doctor doctor;
+  late int? fieldValue;
+  int? ogFieldValue;
+  late List<Departement> regions;
+
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -26,25 +33,47 @@ class _DoctorProfileState extends State<DoctorProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Background(
-      bg: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Page du médecin",
-            style: TextStyle(
-                color: Colors.black54,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Roboto',
-                letterSpacing: -0.2),
+    if (widget.isEdit){
+      return Background(
+        bg: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              "Modifier le médecin",
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  letterSpacing: -0.2),
+            ),
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.black45),
+            backgroundColor: Colors.transparent,
           ),
-          elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.black45),
-          backgroundColor: Colors.transparent,
+          body: Padding(
+              padding: const EdgeInsets.only(top: 3), child: buildDoctor()),
         ),
-        body: Padding(
-            padding: const EdgeInsets.only(top: 3), child: buildDoctor()),
-      ),
-    );
+      );
+    } else {
+      return Background(
+        bg: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              "Page du médecin",
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  letterSpacing: -0.2),
+            ),
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.black45),
+            backgroundColor: Colors.transparent,
+          ),
+          body: Padding(
+              padding: const EdgeInsets.only(top: 3), child: buildDoctor()),
+        ),
+      );
+    }
   }
 
 
@@ -181,18 +210,17 @@ class _DoctorProfileState extends State<DoctorProfile> {
                 },
                 max: 15,
                 validator: (value) {
-                  if (value != null && value.length < 10) {
-                    return "Le numéro de téléphone doit contenir plus de 9 caractères.";
+                  var pattern = RegExp("^[0-9]{9,14}\$");
+                  if (value == null) {
+                    return "Veuillez préciser un numéro de téléphone";
+                  } else if (!pattern.hasMatch(value)) {
+                    return "Le numéro de téléphone doit contenir entre 9 et 14 chiffres.";
                   } else {
-                    // Regex:
-                    // | Phone number needs to start with a 0
-                    // | Phone number needs to be between 10 and 15 characters long
-                    // | Phone needs to contain digits only
                     return null;
                   }
                 },
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 5),
               buildFormInput(
                 name: "Spécialité",
                 icon: Icons.medical_services,
@@ -206,8 +234,52 @@ class _DoctorProfileState extends State<DoctorProfile> {
                   return null;
                 },
               ),
+              const SizedBox(height: 35),
+              FutureBuilder<List<Departement>>(
+                  future: RegionService.getRegions(),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return const Center(
+                            child: CircularProgressIndicator(
+                                color: primaryColour, strokeWidth: 2));
+                      default:
+                        if (!snapshot.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else {
+                          regions = snapshot.data!;
+                          if (ogFieldValue == null){
+                            for (var region in regions) {
+                              if (region.id == doctor.departement!.id){
+                                ogFieldValue = region.id;
+                                fieldValue = ogFieldValue;
+                              }
+                            }
+                          }
+                          return DropdownButtonFormField<int?>(
+                            value: fieldValue,
+                            items: [
+                              for (Departement region in regions)
+                                DropdownMenuItem(
+                                    value: region.id,
+                                    child: Text(region.nom)),
+                            ],
+                            onChanged: (value) => setState(() {
+                              fieldValue = value;
+                              print(fieldValue);
+                              doctor.departement?.id = fieldValue;
+                            }),
+                            onSaved: (value) => setState(() {
+                              fieldValue = value;
+                              doctor.departement?.id = fieldValue;
+                            }),
+                          );
+                        }
+                    }
+                  }),
               const SizedBox(height: 55),
-              buildSubmit()
+              buildSubmit(doctor)
             ],
           ),
         ),
@@ -241,17 +313,25 @@ class _DoctorProfileState extends State<DoctorProfile> {
         style: const TextStyle(fontFamily: 'Roboto', fontSize: 12),
       );
 
-  Widget buildSubmit() => ElevatedButton(
+  Widget buildSubmit(Doctor doctor) => ElevatedButton(
     onPressed: () {
-      // Will be in charge of validating the form fields
-      final isValid = formKey.currentState!.validate();
-      if (isValid) {
-        // The form is valid, we push to the next page or action
+      final isValid = formKey.currentState?.validate();
+      if (isValid!) {
         formKey.currentState?.save();
-        // Unfocus all input fields on validation
-        FocusScope.of(context).unfocus();
+        // print(region.toJson());
+        final add = DoctorService.editDoctor(doctor);
+        add.then((value) {
+          final String snackMessage;
+          if (value[0]) {
+            snackMessage = "Le médecin suivant a été modifié avec succès: \n${doctor.prenom} ${doctor.nom}.";
+            Navigator.of(context).pop();
+          } else {
+            snackMessage = value[2];
+          }
+          ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(value[0], snackMessage));
+        });
       }
     },
-    child: const Text("Modifier"),
+    child: const Text("Ajouter"),
   );
 }
